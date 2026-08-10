@@ -1,0 +1,48 @@
+/* ----------------------------------------
+   Component: Alert - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 18px;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.alert .alert-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.alert .alert-content {
+  flex: 1;
+}
+
+.alert .alert-title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.alert.alert-success {
+  background-color: color-mix(in srgb, #059652, transparent 92%);
+  color: #059652;
+}
+
+.alert.alert-error {
+  background-color: color-mix(in srgb, #df1529, transparent 92%);
+  color: #df1529;
+}
+
+.alert.alert-warning {
+  background-color: color-mix(in srgb, #ffc107, transparent 92%);
+  color: #b8860b;
+}
+
+.alert.alert-info {
+  background-color: color-mix(in srgb, var(--accent-color), transparent 92%);
+  color: var(--accent-color);
+}

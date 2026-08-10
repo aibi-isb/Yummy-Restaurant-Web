@@ -1,0 +1,504 @@
+/* ----------------------------------------
+   Profile Redesign — Shopall Account Settings
+   Split-pane layout with sidebar nav + form panel
+---------------------------------------- */
+
+/* ── Split-pane Layout ── */
+.profile-settings-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.profile-settings-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--surface-color);
+  border-radius: 12px;
+  padding: 16px 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+}
+
+.profile-settings-main {
+  flex: 1;
+  min-width: 0;
+  max-width: 640px;
+}
+
+/* ── Sidebar Navigation ── */
+.sidebar-section-header {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: color-mix(in srgb, var(--default-color), transparent 55%);
+  padding: 8px 12px 6px;
+  margin-top: 4px;
+}
+
+.sidebar-section-header:first-child {
+  margin-top: 0;
+}
+
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
+  text-decoration: none;
+  transition: all .15s ease;
+  border: none;
+  background: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+}
+
+.sidebar-nav-item i {
+  font-size: 15px;
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.sidebar-nav-item:hover {
+  background: color-mix(in srgb, var(--default-color), transparent 94%);
+  color: var(--default-color);
+}
+
+.sidebar-nav-item.active {
+  background: color-mix(in srgb, var(--accent-color), transparent 92%);
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.sidebar-nav-item .nav-arrow {
+  margin-left: auto;
+  font-size: 10px;
+  color: color-mix(in srgb, var(--default-color), transparent 55%);
+}
+
+.sidebar-nav-item.danger {
+  color: #dc3545;
+}
+
+.sidebar-nav-item.danger:hover {
+  background: color-mix(in srgb, #dc3545, transparent 92%);
+}
+
+/* ── Main Panel Sections ── */
+.settings-section {
+  background: var(--surface-color);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+}
+
+.settings-section + .settings-section {
+  margin-top: 20px;
+}
+
+.settings-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--heading-color);
+  margin: 0 0 4px;
+}
+
+.settings-section-desc {
+  font-size: 12px;
+  color: color-mix(in srgb, var(--default-color), transparent 45%);
+  margin: 0 0 20px;
+}
+
+/* ── Avatar Upload ── */
+.avatar-upload-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+}
+
+.avatar-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent-color);
+  flex-shrink: 0;
+}
+
+.avatar-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.avatar-actions .upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 82%);
+  background: var(--surface-color);
+  color: var(--default-color);
+  cursor: pointer;
+  transition: all .15s ease;
+  font-family: inherit;
+}
+
+.avatar-actions .upload-btn:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.avatar-actions .remove-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 8px;
+  border: none;
+  background: none;
+  color: #dc3545;
+  cursor: pointer;
+  transition: all .15s ease;
+  font-family: inherit;
+}
+
+.avatar-actions .remove-btn:hover {
+  background: color-mix(in srgb, #dc3545, transparent 92%);
+}
+
+.avatar-actions .file-hint {
+  font-size: 11px;
+  color: color-mix(in srgb, var(--default-color), transparent 50%);
+  margin: 0;
+}
+
+/* ── Form Fields ── */
+.profile-form .form-group {
+  margin-bottom: 20px;
+}
+
+.profile-form .form-group:last-of-type {
+  margin-bottom: 24px;
+}
+
+.profile-form .form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--heading-color);
+  margin-bottom: 6px;
+}
+
+.profile-form .profile-input {
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 14px;
+  font-family: var(--default-font);
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 82%);
+  border-radius: 8px;
+  background: var(--surface-color);
+  color: var(--default-color);
+  transition: border-color .15s ease, box-shadow .15s ease;
+  box-sizing: border-box;
+}
+
+.profile-form .profile-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color), transparent 85%);
+}
+
+.profile-form .profile-input.has-error {
+  border-color: #dc3545;
+}
+
+.profile-form .profile-textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+.profile-form .form-helper {
+  font-size: 11px;
+  color: color-mix(in srgb, var(--default-color), transparent 45%);
+  margin-top: 4px;
+}
+
+.profile-form .form-error {
+  font-size: 11px;
+  color: #dc3545;
+  margin-top: 4px;
+  display: none;
+}
+
+.profile-form .form-error.visible {
+  display: block;
+}
+
+/* Read-only email field */
+.email-readonly {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  background: color-mix(in srgb, var(--default-color), transparent 96%);
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 88%);
+}
+
+.email-readonly .email-value {
+  font-size: 14px;
+  color: var(--default-color);
+  flex: 1;
+}
+
+.email-readonly .email-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--accent-color), transparent 88%);
+  color: var(--accent-color);
+  white-space: nowrap;
+}
+
+/* ── Action Buttons ── */
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 20px;
+  border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+}
+
+.form-actions .btn-primary {
+  padding: 9px 24px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent-color);
+  color: var(--contrast-color);
+  cursor: pointer;
+  transition: background .15s ease;
+  font-family: inherit;
+}
+
+.form-actions .btn-primary:hover {
+  background: color-mix(in srgb, var(--accent-color), transparent 15%);
+}
+
+.form-actions .btn-secondary {
+  padding: 9px 24px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 82%);
+  background: var(--surface-color);
+  color: var(--default-color);
+  cursor: pointer;
+  transition: all .15s ease;
+  font-family: inherit;
+  text-decoration: none;
+}
+
+.form-actions .btn-secondary:hover {
+  border-color: color-mix(in srgb, var(--default-color), transparent 50%);
+}
+
+/* ── Settings Toggles Section ── */
+.settings-toggle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.settings-toggle-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 94%);
+}
+
+.settings-toggle-item:last-child {
+  border-bottom: none;
+}
+
+.settings-toggle-item .toggle-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.settings-toggle-item .toggle-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent-color), transparent 90%);
+  color: var(--accent-color);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.settings-toggle-item .toggle-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--heading-color);
+}
+
+.settings-toggle-item .toggle-desc {
+  font-size: 11px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+}
+
+/* Toggle switch */
+.toggle-switch {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-switch .toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: color-mix(in srgb, var(--default-color), transparent 75%);
+  border-radius: 22px;
+  transition: .2s;
+}
+
+.toggle-switch .toggle-slider::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: .2s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--accent-color);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(18px);
+}
+
+/* Danger section */
+.settings-section.danger-zone {
+  border: 1px solid color-mix(in srgb, #dc3545, transparent 80%);
+}
+
+.settings-section.danger-zone .settings-section-title {
+  color: #dc3545;
+}
+
+.sign-out-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, #dc3545, transparent 60%);
+  background: none;
+  color: #dc3545;
+  text-decoration: none;
+  transition: all .15s ease;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.sign-out-link:hover {
+  background: color-mix(in srgb, #dc3545, transparent 92%);
+}
+
+/* ── Page header tweaks ── */
+.profile-page .page-header {
+  margin-bottom: 24px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 767.98px) {
+  .profile-settings-layout {
+    flex-direction: column;
+  }
+
+  .profile-settings-sidebar {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 2px;
+    padding: 8px 12px;
+    border-radius: 10px;
+  }
+
+  .sidebar-section-header {
+    display: none;
+  }
+
+  .sidebar-nav-item {
+    white-space: nowrap;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .sidebar-nav-item .nav-arrow {
+    display: none;
+  }
+
+  .profile-settings-main {
+    max-width: 100%;
+  }
+
+  .avatar-upload-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions .btn-primary,
+  .form-actions .btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+}

@@ -1,0 +1,30 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'admin/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'admin/vendors/bootstrap-icons/bootstrap-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'admin/css/style.css' %}">
+  {% block admin_extra_head %}{% endblock %}
+{% endblock %}
+
+{% block body %}
+  <div class="admin-shell">
+    <div class="sidebar-backdrop" data-sidebar-close></div>
+    {% include 'components/sidebar.html' %}
+    <div class="admin-main">
+      {% include 'components/topbar.html' %}
+      <main class="dashboard-content">
+        <div class="container-fluid px-3 px-lg-4 py-4">
+          {% include 'components/alerts.html' %}
+          {% block content %}{% endblock %}
+        </div>
+      </main>
+      {% include 'components/admin_footer.html' %}
+    </div>
+  </div>
+
+  <script src="{% static 'admin/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'admin/js/main.js' %}?v=2"></script>
+  {% block extra_js %}{% endblock %}
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'base/customer_base.html' %}
+{% load static %}
+
+{% block title %}Checkout - Yummy Restaurant{% endblock %}
+
+{% block body_class %}checkout-page{% endblock %}
+
+{% block customer_extra_head %}
+  <link href="{% static 'public/css/features/checkout.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Checkout</h2>
+  <p>Complete your order by filling in your details.</p>
+</div>
+
+<div class="progress-stepper" style="display:flex;gap:8px;margin-bottom:24px;">
+  <div class="progress-step completed" style="flex:1;text-align:center;padding:8px;font-size:13px;font-weight:500;border-bottom:2px solid var(--accent-color);color:var(--accent-color);">Cart</div>
+  <div class="progress-step active" style="flex:1;text-align:center;padding:8px;font-size:13px;font-weight:500;border-bottom:2px solid var(--accent-color);color:var(--accent-color);">Checkout</div>
+  <div class="progress-step" style="flex:1;text-align:center;padding:8px;font-size:13px;color:color-mix(in srgb,var(--default-color),transparent 40%);border-bottom:2px solid color-mix(in srgb,var(--default-color),transparent 85%);">Payment</div>
+</div>
+
+<div class="checkout-layout">
+  <div>
+    <form method="post" class="checkout-form" novalidate>
+      {% csrf_token %}
+
+      <div class="checkout-form-section">
+        <div class="section-title">Delivery Address</div>
+        <div class="form-group">
+          <label class="form-label" for="{{ form.street.id_for_label }}">{{ form.street.label }}</label>
+          {{ form.street }}
+          {% if form.street.errors %}<div class="form-error visible">{{ form.street.errors.0 }}</div>{% endif %}
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="{{ form.city.id_for_label }}">City</label>
+            {{ form.city }}
+            {% if form.city.errors %}<div class="form-error visible">{{ form.city.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="{{ form.state.id_for_label }}">{{ form.state.label }}</label>
+            {{ form.state }}
+            {% if form.state.errors %}<div class="form-error visible">{{ form.state.errors.0 }}</div>{% endif %}
+          </div>
+        </div>
+        <div class="form-row-3">
+          <div class="form-group">
+            <label class="form-label" for="{{ form.zip_code.id_for_label }}">{{ form.zip_code.label }}</label>
+            {{ form.zip_code }}
+            {% if form.zip_code.errors %}<div class="form-error visible">{{ form.zip_code.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="{{ form.phone.id_for_label }}">Phone</label>
+            {{ form.phone }}
+            {% if form.phone.errors %}<div class="form-error visible">{{ form.phone.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="{{ form.delivery_time.id_for_label }}">Delivery Time</label>
+            {{ form.delivery_time }}
+          </div>
+        </div>
+      </div>
+
+      <div class="checkout-form-section" style="margin-top:20px;">
+        <div class="section-title">Delivery Notes</div>
+        <div class="form-group">
+          <label class="form-label" for="{{ form.delivery_notes.id_for_label }}">{{ form.delivery_notes.label }}</label>
+          {{ form.delivery_notes }}
+        </div>
+      </div>
+
+      <div style="margin-top:20px;display:flex;gap:12px;align-items:center;">
+        <a href="{% url 'orders:cart' %}" class="btn-yummy-outline btn-yummy-sm"><i class="bi bi-arrow-left"></i> Cart</a>
+        <button type="submit" class="btn-yummy btn-yummy-block btn-yummy-lg" style="margin:0;flex:1;">Review & Pay</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="checkout-summary-box">
+    <div class="summary-title">Order Summary</div>
+    <div class="checkout-items">
+      {% for item in cart_items %}
+        <div class="checkout-item" style="display:flex;justify-content:space-between;padding:8px 0;font-size:14px;">
+          <div>
+            <div class="checkout-item-name">{{ item.food.name }}</div>
+            <div class="checkout-item-meta" style="font-size:12px;color:color-mix(in srgb,var(--default-color),transparent 40%);">Qty: {{ item.quantity }}</div>
+          </div>
+          <div class="checkout-item-price">{{ currency_symbol }}{{ item.subtotal }}</div>
+        </div>
+      {% endfor %}
+    </div>
+    <hr class="summary-divider">
+    <div class="summary-row" style="display:flex;justify-content:space-between;font-size:14px;padding:4px 0;">
+      <span>Subtotal</span>
+      <span class="summary-subtotal" style="font-weight:500;">{{ currency_symbol }}{{ subtotal }}</span>
+    </div>
+    <div class="summary-row" style="display:flex;justify-content:space-between;font-size:14px;padding:4px 0;">
+      <span>Delivery Fee</span>
+      <span class="summary-delivery" style="font-weight:500;">{{ currency_symbol }}{{ delivery_fee }}</span>
+    </div>
+    <div class="summary-row" style="display:flex;justify-content:space-between;font-size:14px;padding:4px 0;">
+      <span>GST</span>
+      <span class="summary-tax" style="font-weight:500;">{{ currency_symbol }}{{ tax }}</span>
+    </div>
+    <div class="summary-row" style="display:flex;justify-content:space-between;font-size:18px;font-weight:700;padding:12px 0 0;border-top:1px solid color-mix(in srgb, var(--default-color), transparent 90%);margin-top:8px;">
+      <span>Total</span>
+      <span class="summary-total" style="color:var(--accent-color);">{{ currency_symbol }}{{ grand_total }}</span>
+    </div>
+  </div>
+</div>
+{% endblock %}

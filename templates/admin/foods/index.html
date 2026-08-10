@@ -1,0 +1,68 @@
+{% extends 'base/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page-heading">
+  <div class="page-heading-copy">
+    <span class="page-icon"><i class="bi bi-egg-fried" aria-hidden="true"></i></span>
+    <div>
+      <p class="eyebrow mb-1">Food Management</p>
+      <h1 class="h3 mb-1">Foods</h1>
+      <p class="text-muted mb-0">Manage menu items, prices, categories, images, and availability.</p>
+    </div>
+  </div>
+  <div class="heading-actions">
+    <a class="btn btn-primary btn-sm" href="{% url 'dashboard:foods_create' %}"><i class="bi bi-plus-circle"></i> Add Food</a>
+  </div>
+</div>
+
+<section class="panel">
+  <div class="panel-header">
+    <div>
+      <h2 class="h5 mb-1 section-title"><i class="bi bi-list-ul"></i><span>Menu Items</span></h2>
+      <p class="text-muted mb-0">Search and filter restaurant foods.</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <form method="get" class="d-flex gap-2">
+        <select name="category" class="form-select form-select-sm" onchange="this.form.submit()">
+          <option value="">All categories</option>
+          {% for cat in categories %}
+            <option value="{{ cat.id }}" {% if selected_category|stringformat:"s" == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+          {% endfor %}
+        </select>
+        <input class="form-control form-control-sm" type="search" name="query" placeholder="Search foods" value="{{ search_query }}">
+        <button type="submit" class="btn btn-sm btn-outline-secondary">Search</button>
+      </form>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead><tr><th>Food</th><th>Category</th><th>Price</th><th>Availability</th><th class="text-end">Actions</th></tr></thead>
+      <tbody>
+        {% for food in foods %}
+          <tr>
+            <td class="table-media">
+              {% if food.image %}<img class="product-thumb" src="{{ food.image.url }}" alt="{{ food.name }}">{% endif %}
+              <strong>{{ food.name }}</strong>
+            </td>
+            <td>{{ food.category.name }}</td>
+            <td>{{ currency_symbol }}{{ food.price }}</td>
+            <td><span class="badge text-bg-{% if food.is_available %}success{% else %}danger{% endif %}">{% if food.is_available %}Available{% else %}Unavailable{% endif %}</span></td>
+            <td class="text-end">
+              <a class="btn btn-light btn-sm" href="{% url 'menu:detail' food.id %}">View</a>
+              <a class="btn btn-outline-secondary btn-sm" href="{% url 'dashboard:foods_edit' food.id %}">Edit</a>
+              <form method="post" action="{% url 'dashboard:foods_delete' food.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Delete {{ food.name }}?')">Delete</button>
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-center text-muted">No food items found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if is_paginated %}{% include 'components/pagination.html' %}{% endif %}
+</section>
+{% endblock %}

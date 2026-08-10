@@ -1,0 +1,92 @@
+/* ----------------------------------------
+   Orders Feature Styles
+---------------------------------------- */
+.orders-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.orders-header .orders-filter {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Order Tracking Page */
+.tracking-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.tracking-header .tracking-order-id {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--heading-color);
+  font-family: var(--heading-font);
+}
+
+.tracking-header .tracking-status {
+  margin-left: auto;
+}
+
+.tracking-details {
+  background-color: var(--surface-color);
+  border-radius: 5px;
+  padding: 24px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.tracking-details .detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.tracking-details .detail-item .detail-label {
+  font-size: 12px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+  margin-bottom: 2px;
+}
+
+.tracking-details .detail-item .detail-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--default-color);
+}
+
+.tracking-progress {
+  background-color: var(--surface-color);
+  border-radius: 5px;
+  padding: 24px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.tracking-timeline {
+  background-color: var(--surface-color);
+  border-radius: 5px;
+  padding: 24px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+.tracking-timeline .timeline-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--heading-color);
+  margin-bottom: 16px;
+  font-family: var(--heading-font);
+}

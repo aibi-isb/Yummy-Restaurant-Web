@@ -1,0 +1,198 @@
+{% extends 'base/admin_base.html' %}
+{% load static %}
+
+{% block admin_extra_head %}
+<style>
+  .category-form-page {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .category-form-page .panel {
+    margin-bottom: 1.5rem;
+  }
+  .category-form-page .panel-header {
+    border-bottom: 1px solid var(--admin-border);
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .category-form-page .panel-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  .category-form-page .panel-header h2 i {
+    width: 34px;
+    height: 34px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 8px;
+    background: #eaf2ff;
+    color: var(--admin-primary-dark);
+    font-size: 0.95rem;
+  }
+  .category-form-page .form-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--admin-muted);
+    margin-bottom: 0.35rem;
+  }
+  .category-form-page .form-text {
+    font-size: 0.82rem;
+    color: var(--admin-muted);
+  }
+  .slug-preview {
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 0.82rem;
+    padding: 0.4rem 0.75rem;
+    background: var(--admin-surface-soft);
+    border-radius: 6px;
+    border: 1px solid var(--admin-border);
+    color: var(--admin-muted);
+    word-break: break-all;
+  }
+  .slug-preview .slug-prefix {
+    color: var(--admin-text-muted);
+    font-weight: 500;
+  }
+  .slug-preview .slug-value {
+    color: var(--admin-primary);
+    font-weight: 600;
+  }
+  .auto-slug-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    color: var(--admin-muted);
+    margin-top: 0.3rem;
+  }
+  .auto-slug-note i {
+    font-size: 0.7rem;
+  }
+  .category-form-sticky-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(14px);
+    border-top: 1px solid var(--admin-border);
+    padding: 1rem 0;
+    margin-top: 2rem;
+    margin-bottom: -1.75rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .category-form-sticky-footer .btn {
+    min-height: 44px;
+    min-width: 140px;
+  }
+  @media (max-width: 575.98px) {
+    .category-form-sticky-footer .btn {
+      width: 100%;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+  <div class="page-heading-copy">
+    <span class="page-icon"><i class="bi bi-pencil-square"></i></span>
+    <div>
+      <p class="eyebrow mb-1">Category Management</p>
+      <h1 class="h3 mb-1">Edit Category</h1>
+      <p class="text-muted mb-0">Update category details.</p>
+    </div>
+  </div>
+</div>
+
+<form method="post" class="category-form-page">
+  {% csrf_token %}
+
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3 mb-4" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      <span>{{ form.non_field_errors.0 }}</span>
+    </div>
+  {% endif %}
+
+  <section class="panel">
+    <div class="panel-header">
+      <h2 class="mb-0"><i class="bi bi-folder"></i> Category Details</h2>
+    </div>
+    <div class="panel-body">
+      <div class="row g-3">
+        <div class="col-md-7">
+          <label for="{{ form.name.id_for_label }}" class="form-label">Category Name</label>
+          {{ form.name }}
+          {% if form.name.errors %}<div class="text-danger small mt-1">{{ form.name.errors }}</div>{% endif %}
+        </div>
+        <div class="col-md-5">
+          <label for="{{ form.slug.id_for_label }}" class="form-label">Slug</label>
+          {{ form.slug }}
+          {% if form.slug.errors %}<div class="text-danger small mt-1">{{ form.slug.errors }}</div>{% endif %}
+          <div class="slug-preview mt-2 d-flex align-items-center gap-1">
+            <span class="slug-prefix">/menu/</span><span class="slug-value" id="slugPreview">{{ form.instance.slug|default:'your-slug' }}</span>
+          </div>
+          <div class="auto-slug-note">
+            <i class="bi bi-info-circle"></i> Leave blank to auto-generate from name.
+          </div>
+        </div>
+      </div>
+      <div class="row g-3 mt-2">
+        <div class="col-12">
+          <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+          {{ form.description }}
+          {% if form.description.errors %}<div class="text-danger small mt-1">{{ form.description.errors }}</div>{% endif %}
+          <div class="form-text mt-1">Help customers understand what kind of dishes they'll find in this category.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="category-form-sticky-footer">
+    <div class="d-flex gap-2 justify-content-end">
+      <a href="{% url 'dashboard:categories' %}" class="btn btn-light">
+        <i class="bi bi-x-lg"></i> Cancel
+      </a>
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check-lg"></i> Update Category
+      </button>
+    </div>
+  </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const nameInput = document.querySelector('#{{ form.name.id_for_label }}');
+    const slugInput = document.querySelector('#{{ form.slug.id_for_label }}');
+    const slugPreview = document.getElementById('slugPreview');
+
+    function updateSlugPreview() {
+      const val = slugInput.value.trim() || slugify(nameInput.value) || 'your-slug';
+      slugPreview.textContent = val;
+    }
+
+    nameInput.addEventListener('input', updateSlugPreview);
+    slugInput.addEventListener('input', updateSlugPreview);
+    updateSlugPreview();
+  });
+
+  function slugify(text) {
+    return text
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .substring(0, 80) || '';
+  }
+</script>
+{% endblock %}

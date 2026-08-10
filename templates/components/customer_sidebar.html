@@ -1,0 +1,55 @@
+{% with view_name=request.resolver_match.view_name url_name=request.resolver_match.url_name %}
+<div class="sidebar-header">
+  <a href="{% url 'menu:home' %}" class="logo d-flex align-items-center text-decoration-none">
+    <h1 class="sitename">{{ site_config.restaurant_name|default:'Yummy' }}<span>.</span></h1>
+  </a>
+</div>
+
+<nav class="sidebar-nav">
+  <ul>
+    <li>
+      <a href="{% url 'menu:list' %}" class="{% if view_name == 'menu:list' or view_name == 'menu:detail' %}active{% endif %}">
+        <i class="bi bi-search"></i>
+        <span>Browse Menu</span>
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'orders:cart' %}" class="{% if url_name == 'cart' or url_name == 'checkout' or view_name == 'payments:checkout' or view_name == 'payments:success' %}active{% endif %}">
+        <i class="bi bi-cart"></i>
+        <span>Cart</span>
+        {% if cart_count > 0 %}
+          <span class="badge cart-count">{{ cart_count }}</span>
+        {% endif %}
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'orders:list' %}" class="{% if url_name == 'list' or url_name == 'track' %}active{% endif %}">
+        <i class="bi bi-box"></i>
+        <span>Orders</span>
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'notifications:list' %}" class="{% if 'notification' in view_name %}active{% endif %}">
+        <i class="bi bi-bell"></i>
+        <span>Notifications</span>
+        {% if notification_count > 0 %}
+          <span class="badge notif-count">{{ notification_count }}</span>
+        {% endif %}
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'customers:profile' %}" class="{% if url_name == 'profile' or url_name == 'profile_edit' %}active{% endif %}">
+        <i class="bi bi-person"></i>
+        <span>Profile</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<div class="sidebar-footer">
+  <a href="{% url 'auth:logout' %}" class="sign-out-link d-flex align-items-center gap-2 text-decoration-none" style="color:var(--default-color);font-size:14px;font-weight:500;" onclick="return confirm('Are you sure you want to sign out?');">
+    <i class="bi bi-box-arrow-right"></i>
+    <span>Sign Out</span>
+  </a>
+</div>
+{% endwith %}

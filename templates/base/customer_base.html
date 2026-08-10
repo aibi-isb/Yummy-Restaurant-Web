@@ -1,0 +1,32 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+  <link href="{% static 'public/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'public/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'public/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'public/css/main.css' %}" rel="stylesheet">
+  <link href="{% static 'public/css/shared/styles/components/components.css' %}" rel="stylesheet">
+  <link href="{% static 'public/css/layouts/dashboard-layout.css' %}" rel="stylesheet">
+  {% block customer_extra_head %}{% endblock %}
+{% endblock %}
+
+{% block body_class %}customer-page{% endblock %}
+
+{% block body %}
+  {% include 'components/navbar.html' %}
+
+  <main class="dashboard-standalone-main">
+    {% include 'components/alerts.html' %}
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include 'components/footer.html' %}
+
+  <div id="preloader"></div>
+
+  <script src="{% static 'public/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'public/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'public/js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+{% endblock %}

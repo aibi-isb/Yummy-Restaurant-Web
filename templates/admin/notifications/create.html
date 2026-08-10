@@ -1,0 +1,157 @@
+{% extends 'base/admin_base.html' %}
+{% load static %}
+
+{% block admin_extra_head %}
+<style>
+  .notification-form-page {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .notification-form-page .panel {
+    margin-bottom: 1.5rem;
+  }
+  .notification-form-page .panel-header {
+    border-bottom: 1px solid var(--admin-border);
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .notification-form-page .panel-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  .notification-form-page .panel-header h2 i {
+    width: 34px;
+    height: 34px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 8px;
+    background: #eaf2ff;
+    color: var(--admin-primary-dark);
+    font-size: 0.95rem;
+  }
+  .notification-form-page .form-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--admin-muted);
+    margin-bottom: 0.35rem;
+  }
+  .notification-form-page .form-text {
+    font-size: 0.82rem;
+    color: var(--admin-muted);
+  }
+  .notification-form-page .form-control,
+  .notification-form-page .form-select {
+    border-radius: 6px;
+  }
+  .notification-form-page textarea {
+    min-height: 120px;
+  }
+  .notification-form-sticky-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(14px);
+    border-top: 1px solid var(--admin-border);
+    padding: 1rem 0;
+    margin-top: 2rem;
+    margin-bottom: -1.75rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .notification-form-sticky-footer .btn {
+    min-height: 44px;
+    min-width: 140px;
+  }
+  @media (max-width: 575.98px) {
+    .notification-form-sticky-footer .btn {
+      width: 100%;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+  <div class="page-heading-copy">
+    <span class="page-icon"><i class="bi bi-send"></i></span>
+    <div>
+      <p class="eyebrow mb-1">Notification Management</p>
+      <h1 class="h3 mb-1">Send Notification</h1>
+      <p class="text-muted mb-0">Compose and send a manual notification to a customer.</p>
+    </div>
+  </div>
+</div>
+
+<form method="post" class="notification-form-page">
+  {% csrf_token %}
+
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3 mb-4" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      <span>{{ form.non_field_errors.0 }}</span>
+    </div>
+  {% endif %}
+
+  <section class="panel">
+    <div class="panel-header">
+      <h2 class="mb-0"><i class="bi bi-envelope-paper"></i> Notification Details</h2>
+    </div>
+    <div class="panel-body">
+      <div class="row g-3">
+        <div class="col-12">
+          <label for="{{ form.customer.id_for_label }}" class="form-label">Customer</label>
+          {{ form.customer }}
+          {% if form.customer.errors %}<div class="text-danger small mt-1">{{ form.customer.errors }}</div>{% endif %}
+        </div>
+      </div>
+      <div class="row g-3 mt-2">
+        <div class="col-12">
+          <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+          {{ form.title }}
+          {% if form.title.errors %}<div class="text-danger small mt-1">{{ form.title.errors }}</div>{% endif %}
+          <div class="form-text mt-1">A short, clear subject line for the notification.</div>
+        </div>
+      </div>
+      <div class="row g-3 mt-2">
+        <div class="col-12">
+          <label for="{{ form.message.id_for_label }}" class="form-label">Message</label>
+          {{ form.message }}
+          {% if form.message.errors %}<div class="text-danger small mt-1">{{ form.message.errors }}</div>{% endif %}
+          <div class="form-text mt-1">The body of the notification that the customer will see.</div>
+        </div>
+      </div>
+      <div class="row g-3 mt-2">
+        <div class="col-12">
+          <label for="{{ form.notification_type.id_for_label }}" class="form-label">Notification Type</label>
+          {{ form.notification_type }}
+          {% if form.notification_type.errors %}<div class="text-danger small mt-1">{{ form.notification_type.errors }}</div>{% endif %}
+          <div class="form-text mt-1">Categorizes the notification for filtering purposes.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="notification-form-sticky-footer">
+    <div class="d-flex gap-2 justify-content-end">
+      <a href="{% url 'dashboard:notifications' %}" class="btn btn-light">
+        <i class="bi bi-x-lg"></i> Cancel
+      </a>
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-send"></i> Send Notification
+      </button>
+    </div>
+  </div>
+</form>
+{% endblock %}</think>
+
+<｜DSML｜tool_calls>
+<｜DSML｜invoke name="write">
+<｜DSML｜parameter name="filePath" string="true">/Users/aibi/Desktop/Assignment Projects/YUMMY Restaurant/templates/admin/notifications/create.html

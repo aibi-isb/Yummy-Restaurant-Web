@@ -1,0 +1,49 @@
+/* ----------------------------------------
+   Component: Quantity Stepper - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.quantity-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 80%);
+}
+
+.quantity-stepper .qty-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--default-color);
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.quantity-stepper .qty-btn:hover {
+  background-color: color-mix(in srgb, var(--accent-color), transparent 90%);
+  color: var(--accent-color);
+}
+
+.quantity-stepper .qty-input {
+  width: 40px;
+  height: 36px;
+  text-align: center;
+  border: none;
+  border-left: 1px solid color-mix(in srgb, var(--default-color), transparent 80%);
+  border-right: 1px solid color-mix(in srgb, var(--default-color), transparent 80%);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--default-color);
+  background: transparent;
+  outline: none;
+  -moz-appearance: textfield;
+}
+
+.quantity-stepper .qty-input::-webkit-inner-spin-button,
+.quantity-stepper .qty-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

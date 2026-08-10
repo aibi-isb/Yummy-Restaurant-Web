@@ -1,0 +1,161 @@
+/* ----------------------------------------
+   Customer Layout
+   Sidebar + top bar + main content area
+---------------------------------------- */
+.customer-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.customer-layout .customer-main {
+  flex: 1;
+  margin-left: 260px;
+  display: flex;
+  flex-direction: column;
+  transition: 0.3s;
+}
+
+.customer-layout .customer-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background-color: var(--surface-color);
+  border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  gap: 16px;
+}
+
+.customer-layout .customer-topbar .topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.customer-layout .customer-topbar .sidebar-toggle {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--nav-color);
+  cursor: pointer;
+  padding: 4px;
+  display: none;
+  transition: 0.2s;
+}
+
+.customer-layout .customer-topbar .sidebar-toggle:hover {
+  color: var(--accent-color);
+}
+
+.customer-layout .customer-topbar .topbar-search {
+  max-width: 320px;
+  width: 100%;
+}
+
+.customer-layout .customer-topbar .topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.customer-layout .customer-topbar .topbar-link {
+  position: relative;
+  color: var(--nav-color);
+  font-size: 20px;
+  transition: 0.2s;
+  text-decoration: none;
+}
+
+.customer-layout .customer-topbar .topbar-link:hover {
+  color: var(--accent-color);
+}
+
+.customer-layout .customer-topbar .topbar-link .badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  color: var(--contrast-color);
+  font-weight: 600;
+  min-width: 18px;
+  text-align: center;
+}
+
+.customer-layout .customer-topbar .topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--default-color);
+}
+
+.customer-layout .customer-topbar .topbar-user .user-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--default-color);
+}
+
+@media (max-width: 991px) {
+  .customer-layout .customer-main {
+    margin-left: 0;
+  }
+
+  .customer-layout .customer-topbar .sidebar-toggle {
+    display: block;
+  }
+
+  .customer-layout .customer-topbar .topbar-search {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 576px) {
+  .customer-layout .customer-topbar {
+    padding: 10px 16px;
+  }
+
+  .customer-layout .customer-topbar .topbar-search {
+    max-width: 140px;
+  }
+
+  .customer-layout .customer-topbar .topbar-user .user-name {
+    display: none;
+  }
+}
+
+/* ----------------------------------------
+   Customer Content Area
+---------------------------------------- */
+.customer-content {
+  padding: 30px 24px;
+  flex: 1;
+}
+
+.customer-content .page-header {
+  margin-bottom: 24px;
+}
+
+.customer-content .page-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  font-family: var(--heading-font);
+  color: var(--heading-color);
+  margin-bottom: 4px;
+}
+
+.customer-content .page-header p {
+  font-size: 14px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+  margin: 0;
+}
+
+@media (max-width: 576px) {
+  .customer-content {
+    padding: 20px 16px;
+  }
+}

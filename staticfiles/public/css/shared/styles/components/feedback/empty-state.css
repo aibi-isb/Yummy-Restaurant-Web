@@ -1,0 +1,31 @@
+/* ----------------------------------------
+   Component: Empty State - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-state .empty-icon {
+  font-size: 56px;
+  color: color-mix(in srgb, var(--default-color), transparent 75%);
+  margin-bottom: 16px;
+}
+
+.empty-state h4 {
+  font-size: 20px;
+  font-weight: 600;
+  font-family: var(--default-font);
+  color: var(--heading-color);
+  margin-bottom: 8px;
+}
+
+.empty-state p {
+  font-size: 14px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+  margin-bottom: 20px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}

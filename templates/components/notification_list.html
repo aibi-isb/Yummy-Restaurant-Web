@@ -1,0 +1,24 @@
+{% comment %}
+  Re‑usable fragment for the left‑hand list. It receives a queryset named
+  "notifications" (or "notification_list" when used from the ListView).
+{% endcomment %}
+<ul class="notification-list">
+  {% for notif in notifications %}
+    <li class="notification-item {% if not notif.is_read %}unread{% endif %}">
+      <a href="{% url 'notifications:detail' notif.id %}">
+        <div class="notif-icon"><i class="bi bi-bell"></i></div>
+        <div class="notif-summary">
+          <strong class="notif-title">{{ notif.title }}</strong>
+          <p class="notif-snippet">{{ notif.message|truncatewords:12 }}</p>
+          <span class="notif-time">{{ notif.created_at|timesince }} ago</span>
+        </div>
+        {% if not notif.is_read %}<span class="unread-dot"></span>{% endif %}
+      </a>
+    </li>
+  {% empty %}
+    <li class="empty-state"><i class="bi bi-bell-slash"></i> No notifications</li>
+  {% endfor %}
+</ul>
+{% if is_paginated %}
+  {% include 'components/pagination.html' %}
+{% endif %}

@@ -1,0 +1,53 @@
+/* ----------------------------------------
+   Dashboard Standalone Layout
+   Full-width page with navbar, no sidebar
+---------------------------------------- */
+.dashboard-standalone-page {
+  background-color: var(--background-color);
+}
+
+.dashboard-standalone-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+}
+
+.dashboard-standalone-main .page-header {
+  margin-bottom: 28px;
+}
+
+.dashboard-standalone-main .page-header h2 {
+  font-size: 26px;
+  font-weight: 600;
+  font-family: var(--heading-font);
+  color: var(--heading-color);
+  margin-bottom: 4px;
+}
+
+.dashboard-standalone-main .page-header p {
+  font-size: 14px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+  margin: 0;
+}
+
+/* Dashboard page body class for redesign styles */
+.dashboard-page .statistics-card {
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.dashboard-page .statistics-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,.1);
+}
+
+@media (min-width: 992px) {
+  .dashboard-standalone-main {
+    padding: 32px 32px 60px;
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard-standalone-main {
+    padding: 24px 16px 40px;
+  }
+}

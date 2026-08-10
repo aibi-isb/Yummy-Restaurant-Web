@@ -1,0 +1,91 @@
+/* ----------------------------------------
+   Component: Modal - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 99990;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal {
+  background-color: var(--surface-color);
+  border-radius: 5px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+  animation: modal-in 0.3s ease;
+}
+
+.modal.modal-lg {
+  max-width: 700px;
+}
+
+.modal.modal-sm {
+  max-width: 380px;
+}
+
+.modal .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+}
+
+.modal .modal-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  font-family: var(--default-font);
+  margin: 0;
+}
+
+.modal .modal-header .modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: color-mix(in srgb, var(--default-color), transparent 50%);
+  cursor: pointer;
+  transition: 0.2s;
+  padding: 0;
+  line-height: 1;
+}
+
+.modal .modal-header .modal-close:hover {
+  color: var(--default-color);
+}
+
+.modal .modal-body {
+  padding: 20px;
+}
+
+.modal .modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

@@ -1,0 +1,65 @@
+{% extends 'base/customer_base.html' %}
+{% load static %}
+
+{% block title %}Notifications - Yummy Restaurant{% endblock %}
+
+{% block body_class %}notifications-page{% endblock %}
+
+{% block customer_extra_head %}
+  <link href="{% static 'public/css/features/notifications.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Notifications</h2>
+  <p>Stay updated with your orders and promotions. (<span class="notifications-count">{{ notifications|length }}</span> total)</p>
+</div>
+
+<div class="notifications-header">
+  <div></div>
+  {% if notification_count > 0 %}
+    <form method="post" action="{% url 'notifications:mark_all_read' %}" class="d-inline-block" onsubmit="return confirm('Mark all notifications as read?');">
+      {% csrf_token %}
+      <button type="submit" class="btn-yummy-outline btn-yummy-sm"><i class="bi bi-check-all"></i> Mark all as read</button>
+    </form>
+    <form method="post" action="{% url 'notifications:clear_all' %}" class="d-inline-block ms-2" onsubmit="return confirm('This will permanently delete all your notifications. Are you sure?');">
+      {% csrf_token %}
+      <button type="submit" class="btn-yummy-outline btn-yummy-sm btn-clear-all"><i class="bi bi-trash3"></i> Clear all</button>
+    </form>
+  {% endif %}
+</div>
+
+<div class="profile-details-section">
+  {% if notifications %}
+    <div class="notifications-list">
+      {% for notif in notifications %}
+        <a href="{% url 'notifications:detail' notif.pk %}" class="notification-item-link">
+          <div class="notification-item {% if not notif.is_read %}unread{% endif %}" data-notif-id="{{ notif.id }}">
+            <div class="notif-icon">
+              <i class="bi bi-bell"></i>
+            </div>
+            <div class="notif-content">
+              <div class="notif-title">{{ notif.title }}</div>
+              <div class="notif-message">{{ notif.message }}</div>
+              <div class="notif-time">{{ notif.created_at|timesince }} ago</div>
+            </div>
+            {% if not notif.is_read %}
+              <div class="notif-unread-dot"></div>
+            {% endif %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    <div class="notification-detail" style="display:none;"></div>
+    {% if is_paginated %}
+      {% include 'components/pagination.html' %}
+    {% endif %}
+  {% else %}
+    <div class="empty-state">
+      <i class="bi bi-bell-slash empty-icon"></i>
+      <h4>No notifications</h4>
+      <p>You're all caught up!</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

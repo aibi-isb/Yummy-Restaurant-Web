@@ -1,0 +1,88 @@
+/* ----------------------------------------
+   Component: Status Progress - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.status-progress {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 16px 0;
+}
+
+.status-progress .progress-step {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+
+.status-progress .progress-step .step-indicator {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 6px;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: color-mix(in srgb, var(--default-color), transparent 90%);
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+  transition: 0.3s;
+  position: relative;
+  z-index: 1;
+}
+
+.status-progress .progress-step .step-label {
+  font-size: 11px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+  font-weight: 500;
+}
+
+.status-progress .progress-step.completed .step-indicator {
+  background-color: #059652;
+  color: var(--contrast-color);
+}
+
+.status-progress .progress-step.active .step-indicator {
+  background-color: var(--accent-color);
+  color: var(--contrast-color);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-color), transparent 70%);
+}
+
+.status-progress .progress-step.cancelled .step-indicator {
+  background-color: #df1529;
+  color: var(--contrast-color);
+}
+
+.status-progress .progress-step.completed .step-label,
+.status-progress .progress-step.active .step-label {
+  color: var(--default-color);
+  font-weight: 600;
+}
+
+.status-progress .progress-step::after {
+  content: "";
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background-color: color-mix(in srgb, var(--default-color), transparent 85%);
+  z-index: 0;
+}
+
+.status-progress .progress-step:last-child::after {
+  display: none;
+}
+
+.status-progress .progress-step.completed::after {
+  background-color: #059652;
+}
+
+.status-progress .progress-step.active::after {
+  background: linear-gradient(to right, #059652, var(--accent-color));
+}
+
+.status-progress .progress-step.cancelled::after {
+  background-color: #df1529;
+}

@@ -1,0 +1,62 @@
+{% extends 'base/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page-heading">
+  <div class="page-heading-copy">
+    <span class="page-icon"><i class="bi bi-credit-card"></i></span>
+    <div>
+      <p class="eyebrow mb-1">Payment Verification</p>
+      <h1 class="h3 mb-1">Payments</h1>
+      <p class="text-muted mb-0">Approve or reject customer payments.</p>
+    </div>
+  </div>
+</div>
+
+<section class="panel">
+  <div class="panel-header">
+    <div>
+      <h2 class="h5 mb-1 section-title"><i class="bi bi-list-ul"></i><span>Payment Requests</span></h2>
+    </div>
+    <form method="get">
+      <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+        {% for sk, sl in statuses %}
+          <option value="{{ sk }}" {% if selected_status == sk %}selected{% endif %}>{{ sl }}</option>
+        {% endfor %}
+      </select>
+    </form>
+  </div>
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead><tr><th>Order</th><th>Customer</th><th>Method</th><th>Amount</th><th>Status</th><th>Date</th><th class="text-end">Actions</th></tr></thead>
+      <tbody>
+        {% for payment in payments %}
+          <tr>
+            <td>{{ payment.order.order_number }}</td>
+            <td>{{ payment.customer.full_name }}</td>
+            <td>{{ payment.get_method_display }}</td>
+            <td>{{ currency_symbol }}{{ payment.amount }}</td>
+            <td><span class="badge text-bg-{% if payment.status == 'approved' %}success{% elif payment.status == 'pending' %}warning{% else %}danger{% endif %}">{{ payment.get_status_display }}</span></td>
+            <td>{{ payment.created_at|date:"M d, Y" }}</td>
+            <td class="text-end">
+              {% if payment.status == 'pending' %}
+                <form method="post" action="{% url 'dashboard:payments_approve' payment.id %}" style="display:inline;" onsubmit="return confirm('Approve this payment of {{ currency_symbol }}{{ payment.amount }} from {{ payment.customer.full_name }}?');">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                </form>
+                <form method="post" action="{% url 'dashboard:payments_reject' payment.id %}" style="display:inline;" onsubmit="return confirm('Reject this payment of {{ currency_symbol }}{{ payment.amount }} from {{ payment.customer.full_name }}?');">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                </form>
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="7" class="text-center text-muted">No payments found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if is_paginated %}{% include 'components/pagination.html' %}{% endif %}
+</section>
+{% endblock %}

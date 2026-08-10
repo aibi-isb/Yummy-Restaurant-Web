@@ -1,0 +1,42 @@
+[
+  {
+    "model": "menu.foodcategory",
+    "pk": 1,
+    "fields": {
+      "name": "Main Course",
+      "slug": "main-course",
+      "description": "Hearty and fulfilling main dishes",
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "menu.foodcategory",
+    "pk": 2,
+    "fields": {
+      "name": "Desserts",
+      "slug": "desserts",
+      "description": "Sweet treats to end your meal",
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "menu.foodcategory",
+    "pk": 3,
+    "fields": {
+      "name": "Drinks",
+      "slug": "drinks",
+      "description": "Refreshing beverages",
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "menu.foodcategory",
+    "pk": 4,
+    "fields": {
+      "name": "Appetizers",
+      "slug": "appetizers",
+      "description": "Light bites to start your meal",
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  }
+]

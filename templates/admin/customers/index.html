@@ -1,0 +1,52 @@
+{% extends 'base/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page-heading">
+  <div class="page-heading-copy">
+    <span class="page-icon"><i class="bi bi-people"></i></span>
+    <div>
+      <p class="eyebrow mb-1">Customer Management</p>
+      <h1 class="h3 mb-1">Customers</h1>
+      <p class="text-muted mb-0">View and manage registered customers.</p>
+    </div>
+  </div>
+</div>
+
+<section class="panel">
+  <div class="panel-header">
+    <div>
+      <h2 class="h5 mb-1 section-title"><i class="bi bi-list-ul"></i><span>All Customers</span></h2>
+    </div>
+    <form method="get">
+      <input class="form-control form-control-sm" type="search" name="query" placeholder="Search by name or phone" value="{{ search_query }}">
+    </form>
+  </div>
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead><tr><th>Name</th><th>Phone</th><th>Address</th><th>Username</th><th>Registered</th><th class="text-end">Actions</th></tr></thead>
+      <tbody>
+        {% for customer in customers %}
+          <tr>
+            <td><strong>{{ customer.full_name }}</strong></td>
+            <td>{{ customer.phone_number }}</td>
+            <td>{{ customer.address|truncatewords:10 }}</td>
+            <td>{{ customer.user.username }}</td>
+            <td>{{ customer.created_at|date:"M d, Y" }}</td>
+            <td class="text-end">
+              <a class="btn btn-outline-secondary btn-sm" href="{% url 'dashboard:customers_edit' customer.id %}">Edit</a>
+              <form method="post" action="{% url 'dashboard:customers_delete' customer.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Delete {{ customer.full_name }} and their account?')">Delete</button>
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="6" class="text-center text-muted">No customers found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if is_paginated %}{% include 'components/pagination.html' %}{% endif %}
+</section>
+{% endblock %}

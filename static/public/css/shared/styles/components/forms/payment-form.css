@@ -1,0 +1,50 @@
+/* ----------------------------------------
+   Component: Payment Form - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.payment-form {
+  padding: 24px;
+  background-color: var(--surface-color);
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+.payment-form .payment-methods {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.payment-form .payment-method-option {
+  flex: 1;
+  min-width: 140px;
+  padding: 14px;
+  text-align: center;
+  border: 2px solid color-mix(in srgb, var(--default-color), transparent 85%);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s;
+  background: var(--surface-color);
+}
+
+.payment-form .payment-method-option:hover {
+  border-color: color-mix(in srgb, var(--accent-color), transparent 50%);
+}
+
+.payment-form .payment-method-option.active {
+  border-color: var(--accent-color);
+  background-color: color-mix(in srgb, var(--accent-color), transparent 95%);
+}
+
+.payment-form .payment-method-option i {
+  font-size: 28px;
+  color: var(--accent-color);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.payment-form .payment-method-option span {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--default-color);
+}

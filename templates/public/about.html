@@ -1,0 +1,78 @@
+{% extends 'base/public_base.html' %}
+{% load static %}
+
+{% block title %}About Us - Yummy Restaurant{% endblock %}
+
+{% block extra_head %}
+  {{ block.super }}
+  <link href="{% static 'public/css/shared/styles/components/components.css' %}" rel="stylesheet">
+  <link href="{% static 'public/css/features/about.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body_class %}about-page{% endblock %}
+
+{% block content %}
+<div class="page-title" data-aos="fade">
+  <div class="container">
+    <h1>About Us</h1>
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a href="{% url 'menu:home' %}">Home</a></li>
+        <li class="current">About Us</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="about-content" data-aos="fade-up">
+          <h2>Our Story</h2>
+          <p>Founded in 2010, Yummy Restaurant began as a small family-owned eatery with a passion for serving authentic, delicious food made from the freshest ingredients. What started as a humble kitchen dream has grown into a beloved local establishment known for its warm hospitality and exceptional cuisine.</p>
+          <p>Our journey began when our founder, Maria Rodriguez, decided to share her grandmother's secret recipes with the community. With nothing but a small space, a few tables, and a lot of love, she created a dining experience that quickly became a neighborhood favorite.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col-lg-6">
+        <div class="about-stats" data-aos="fade-up" data-aos-delay="100">
+          <h3>Our Values</h3>
+          <ul class="values-list">
+            <li><i class="bi bi-check-circle"></i> <strong>Quality Ingredients:</strong> We source only the freshest, locally-sourced ingredients</li>
+            <li><i class="bi bi-check-circle"></i> <strong>Authentic Flavors:</strong> Traditional recipes passed down through generations</li>
+            <li><i class="bi bi-check-circle"></i> <strong>Warm Hospitality:</strong> Treating every guest like family</li>
+            <li><i class="bi bi-check-circle"></i> <strong>Community Focus:</strong> Supporting local farmers and artisans</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="about-image" data-aos="fade-up" data-aos-delay="200">
+          <img src="{% static 'public/img/about.jpg' %}" alt="Yummy Restaurant Interior" class="img-fluid rounded">
+          <div class="about-badge">Established 2010</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col-lg-12">
+        <div class="about-mission" data-aos="fade-up">
+          <h2>Our Mission</h2>
+          <p>At Yummy Restaurant, our mission is simple: to create memorable dining experiences that bring people together through exceptional food and genuine hospitality. We believe that every meal should be a celebration, and we strive to make each visit special for our guests.</p>
+          <p>We are committed to:</p>
+          <ul>
+            <li>Maintaining the highest standards of food quality and safety</li>
+            <li>Providing attentive, personalized service to every guest</li>
+            <li>Creating a welcoming atmosphere where everyone feels at home</li>
+            <li>Continuously innovating while honoring our culinary traditions</li>
+            <li>Giving back to our community through various initiatives and partnerships</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,84 @@
+/* ----------------------------------------
+   Feature: Payment Success - YUMMI Restaurant
+---------------------------------------- */
+
+.payment-success-page .page-success {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.payment-success-page .success-animation {
+  margin-bottom: 24px;
+}
+
+.payment-success-page .success-icon {
+  font-size: 80px;
+  color: #059652;
+  display: inline-block;
+  animation: success-pop 0.5s ease;
+}
+
+@keyframes success-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.payment-success-page .success-title {
+  font-size: 28px;
+  font-weight: 700;
+  font-family: var(--default-font);
+  color: var(--heading-color);
+  margin-bottom: 8px;
+}
+
+.payment-success-page .success-subtitle {
+  font-size: 15px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+  margin-bottom: 32px;
+}
+
+.payment-success-page .success-details {
+  max-width: 400px;
+  margin: 0 auto 32px;
+  background-color: var(--surface-color);
+  border-radius: 5px;
+  padding: 24px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.payment-success-page .success-details .detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.payment-success-page .success-details .detail-row + .detail-row {
+  border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+}
+
+.payment-success-page .success-details .detail-label {
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+}
+
+.payment-success-page .success-details .detail-value {
+  font-weight: 600;
+  color: var(--heading-color);
+}
+
+.payment-success-page .success-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}

@@ -1,0 +1,9 @@
+/* Dashboard-specific overrides */
+.dashboard-page .statistics-card {
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.dashboard-page .statistics-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,.1);
+}

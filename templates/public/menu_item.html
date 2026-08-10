@@ -1,0 +1,227 @@
+{% extends 'base/public_base.html' %}
+{% load static %}
+
+{% block title %}{{ food.name }} - Yummy Restaurant{% endblock %}
+
+{% block extra_head %}
+  {{ block.super }}
+  <link href="{% static 'public/css/shared/styles/components/components.css' %}" rel="stylesheet">
+  <link href="{% static 'public/css/features/menu.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body_class %}food-details-page{% endblock %}
+
+{% block content %}
+<div class="page-title" data-aos="fade">
+  <div class="container">
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a href="{% url 'menu:home' %}">Home</a></li>
+        <li><a href="{% url 'menu:list' %}">Menu</a></li>
+        {% if food.category %}
+          <li><a href="{% url 'menu:list' %}?category={{ food.category.id }}">{{ food.category.name }}</a></li>
+        {% endif %}
+        <li class="current">{{ food.name|truncatechars:30 }}</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="menu-detail-panel" data-aos="fade-up">
+      <div class="menu-detail">
+        <div class="row align-items-start gy-4">
+          <div class="col-lg-5">
+            <div class="menu-image-wrapper">
+              {% if food.image %}
+                <a href="{{ food.image.url }}" class="glightbox" data-gallery="food-detail" aria-label="View full size image of {{ food.name }}">
+                  <img src="{{ food.image.url }}" alt="{{ food.name }}" class="menu-image img-fluid">
+                </a>
+              {% else %}
+                <img src="{% static 'public/img/food-placeholder.jpg' %}" alt="{{ food.name }}" class="menu-image img-fluid">
+              {% endif %}
+
+              {% if food.featured %}
+                <span class="featured-badge"><i class="bi bi-star-fill"></i> Featured</span>
+              {% endif %}
+              {% if food.category %}
+                <span class="category-chip" {% if food.featured %}style="top:44px;"{% endif %}>{{ food.category.name }}</span>
+              {% endif %}
+              <span class="image-zoom-hint"><i class="bi bi-zoom-in"></i> Tap to enlarge</span>
+            </div>
+          </div>
+
+          <div class="col-lg-7 menu-detail-info">
+            <h1 class="menu-title">{{ food.name }}</h1>
+            <p class="menu-description">{{ food.description }}</p>
+
+            <div class="menu-meta-grid">
+              <div class="meta-card">
+                <span class="meta-label"><i class="bi bi-grid"></i> Category</span>
+                <span class="meta-value">{{ food.category.name }}</span>
+              </div>
+              <div class="meta-card">
+                <span class="meta-label"><i class="bi bi-box-seam"></i> Availability</span>
+                <span class="meta-value">
+                  <span class="availability-badge {% if food.is_available %}in-stock{% else %}out-of-stock{% endif %}">
+                    {% if food.is_available %}In Stock{% else %}Out of Stock{% endif %}
+                  </span>
+                </span>
+              </div>
+              <div class="meta-card">
+                <span class="meta-label"><i class="bi bi-currency-exchange"></i> Price</span>
+                <span class="meta-value" style="color:var(--accent-color);font-weight:700;">{{ currency_symbol }}{{ food.price }}</span>
+              </div>
+            </div>
+
+            <div class="menu-purchase-box" id="menu-purchase-box">
+              <span class="price-badge">{{ currency_symbol }}{{ food.price }}</span>
+
+              {% if food.is_available %}
+                <form method="post" action="{% url 'orders:cart' %}" class="d-flex align-items-center gap-2 flex-wrap" id="add-to-cart-form">
+                  {% csrf_token %}
+                  <input type="hidden" name="food_id" value="{{ food.id }}">
+                  <input type="hidden" name="action" value="add">
+                  <div class="quantity-stepper">
+                    <button type="button" class="qty-btn" onclick="stepQty(-1)" aria-label="Decrease quantity"><i class="bi bi-dash"></i></button>
+                    <input type="number" name="quantity" value="1" min="1" max="99" class="qty-input" id="detail-qty" readonly aria-label="Quantity">
+                    <button type="button" class="qty-btn" onclick="stepQty(1)" aria-label="Increase quantity"><i class="bi bi-plus"></i></button>
+                  </div>
+                  <button type="submit" class="btn-yummy add-to-cart-btn btn-yummy-lg">
+                    <i class="bi bi-cart-plus"></i> Add to Cart
+                  </button>
+                </form>
+              {% else %}
+                <div class="menu-unavailable-notice">
+                  <i class="bi bi-exclamation-circle-fill"></i>
+                  <div>
+                    <strong>Currently unavailable</strong>
+                    <p class="mb-0" style="font-size:13px;margin-top:4px;">This item isn't available to order right now. Browse similar dishes below.</p>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-3">
+              <a href="{% url 'menu:list' %}{% if food.category %}?category={{ food.category.id }}{% endif %}" class="btn-yummy-outline">
+                <i class="bi bi-arrow-left"></i> More {{ food.category.name }}
+              </a>
+              <a href="{% url 'orders:cart' %}" class="btn-yummy-outline">
+                <i class="bi bi-cart"></i> View Cart
+              </a>
+            </div>
+
+            {% if user.is_authenticated and user.is_staff %}
+              <div class="mt-4 pt-3 border-top d-flex gap-2">
+                <a href="{% url 'dashboard:foods_edit' food.id %}" class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i> Edit Food</a>
+                <form method="post" action="{% url 'dashboard:foods_delete' food.id %}" onsubmit="return confirm('Delete {{ food.name }}?');">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Delete</button>
+                </form>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if related_foods %}
+      <div class="related-foods" data-aos="fade-up" data-aos-delay="100">
+        <div class="section-title-sm">
+          <h2>You May Also Like</h2>
+          <p>Related <span class="description-title">Items</span></p>
+        </div>
+        <div class="swiper related-foods-swiper">
+          <div class="swiper-wrapper">
+            {% for related in related_foods %}
+              <div class="swiper-slide">
+                <article class="food-card">
+                  <div class="food-card-image">
+                    <a href="{% url 'menu:detail' related.id %}">
+                      {% if related.image %}
+                        <img src="{{ related.image.url }}" alt="{{ related.name }}" loading="lazy" style="height:180px;">
+                      {% else %}
+                        <img src="{% static 'public/img/food-placeholder.jpg' %}" alt="{{ related.name }}" loading="lazy" style="height:180px;">
+                      {% endif %}
+                    </a>
+                    {% if related.category %}
+                      <span class="category-chip">{{ related.category.name }}</span>
+                    {% endif %}
+                  </div>
+                  <div class="food-card-body" style="padding:12px 16px;">
+                    <h3 class="food-card-title" style="font-size:16px;">
+                      <a href="{% url 'menu:detail' related.id %}">{{ related.name }}</a>
+                    </h3>
+                    <div class="food-card-footer">
+                      <span class="food-card-price" style="font-size:18px;">{{ currency_symbol }}{{ related.price }}</span>
+                      <a href="{% url 'menu:detail' related.id %}" class="btn-yummy-text btn-yummy-sm" style="font-size:12px;">View</a>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% if food.is_available %}
+  <div class="menu-sticky-bar" id="menu-sticky-bar">
+    <div>
+      <div style="font-size:13px;color:color-mix(in srgb,var(--default-color),transparent 40%);">{{ food.name|truncatechars:24 }}</div>
+      <div class="sticky-price">{{ currency_symbol }}{{ food.price }}</div>
+    </div>
+    <button type="submit" form="add-to-cart-form" class="btn-yummy btn-yummy-sm">
+      <i class="bi bi-cart-plus"></i> Add to Cart
+    </button>
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function stepQty(delta) {
+    const input = document.getElementById('detail-qty');
+    if (!input) return;
+    input.value = Math.max(1, Math.min(99, parseInt(input.value, 10) + delta));
+  }
+
+  if (typeof GLightbox !== 'undefined') {
+    GLightbox({ selector: '.glightbox' });
+  }
+
+  if (window.Swiper && document.querySelector('.related-foods-swiper')) {
+    new Swiper('.related-foods-swiper', {
+      loop: false,
+      speed: 600,
+      spaceBetween: 24,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      pagination: { el: '.swiper-pagination', type: 'bullets', clickable: true },
+      breakpoints: {
+        320: { slidesPerView: 1, spaceBetween: 16 },
+        576: { slidesPerView: 2, spaceBetween: 16 },
+        992: { slidesPerView: 3, spaceBetween: 24 },
+        1200: { slidesPerView: 4, spaceBetween: 24 }
+      }
+    });
+  }
+
+  const purchaseBox = document.getElementById('menu-purchase-box');
+  const stickyBar = document.getElementById('menu-sticky-bar');
+  if (purchaseBox && stickyBar) {
+    const observer = new IntersectionObserver(([entry]) => {
+      stickyBar.classList.toggle('is-visible', !entry.isIntersecting);
+    }, { threshold: 0, rootMargin: '-80px 0px 0px 0px' });
+    observer.observe(purchaseBox);
+  }
+</script>
+{% endblock %}

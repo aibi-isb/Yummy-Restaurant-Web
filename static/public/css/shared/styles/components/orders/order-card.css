@@ -1,0 +1,80 @@
+/* ----------------------------------------
+   Component: Order Card - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.order-card {
+  background-color: var(--surface-color);
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.order-card:hover {
+  box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.12);
+}
+
+.order-card .order-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.order-card .order-id {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--heading-color);
+  font-family: var(--default-font);
+}
+
+.order-card .order-date {
+  font-size: 13px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+}
+
+.order-card .order-items {
+  margin-bottom: 12px;
+}
+
+.order-card .order-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 13px;
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
+}
+
+.order-card .order-item .item-name {
+  flex: 1;
+}
+
+.order-card .order-item .item-qty {
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+  margin: 0 12px;
+}
+
+.order-card .order-total {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--heading-color);
+}
+
+.order-card .order-total .total-amount {
+  color: var(--accent-color);
+}
+
+.order-card .order-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}

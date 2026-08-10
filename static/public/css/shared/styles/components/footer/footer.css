@@ -1,0 +1,4 @@
+/* App footer sits at the bottom of content areas */
+.app-footer {
+  flex-shrink: 0;
+}

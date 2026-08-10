@@ -1,0 +1,142 @@
+/* ----------------------------------------
+   Component: Sidebar - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.sidebar {
+  background-color: var(--surface-color);
+  width: 260px;
+  min-height: 100vh;
+  border-right: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transition: 0.3s;
+}
+
+.sidebar .sidebar-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+}
+
+.sidebar .sidebar-header .logo h1 {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  font-family: var(--heading-font);
+  color: var(--heading-color);
+  margin: 0;
+}
+
+.sidebar .sidebar-header .logo span {
+  color: #ac2b28;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.sidebar .sidebar-nav {
+  flex: 1;
+  padding: 16px 0;
+  overflow-y: auto;
+}
+
+.sidebar .sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar .sidebar-nav li {
+  margin: 2px 0;
+}
+
+.sidebar .sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--nav-font);
+  color: var(--nav-color);
+  text-decoration: none;
+  transition: 0.3s;
+  border-left: 3px solid transparent;
+}
+
+.sidebar .sidebar-nav a:hover {
+  color: var(--accent-color);
+  background-color: color-mix(in srgb, var(--accent-color), transparent 95%);
+}
+
+.sidebar .sidebar-nav a.active {
+  color: var(--accent-color);
+  background-color: color-mix(in srgb, var(--accent-color), transparent 95%);
+  border-left-color: var(--accent-color);
+}
+
+.sidebar .sidebar-nav a i {
+  font-size: 18px;
+  width: 20px;
+  text-align: center;
+}
+
+.sidebar .sidebar-nav .badge {
+  margin-left: auto;
+  background-color: var(--accent-color);
+  color: var(--contrast-color);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 50px;
+  font-weight: 600;
+}
+
+.sidebar .sidebar-footer {
+  padding: 16px 24px;
+  border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+}
+
+.sidebar .sidebar-footer .user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar .sidebar-footer .user-info .user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--default-color);
+}
+
+.sidebar .sidebar-footer .user-info .user-email {
+  font-size: 12px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+}
+
+@media (max-width: 991px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+  }
+  .sidebar-overlay.active {
+    display: block;
+  }
+}
+
+@media (min-width: 992px) {
+  .sidebar-toggle {
+    display: none !important;
+  }
+}

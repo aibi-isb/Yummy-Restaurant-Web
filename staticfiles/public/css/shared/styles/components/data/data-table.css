@@ -1,0 +1,87 @@
+/* ----------------------------------------
+   Component: Data Table - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.data-table-wrapper {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+  background-color: color-mix(in srgb, var(--default-color), transparent 97%);
+  border-bottom: 2px solid color-mix(in srgb, var(--default-color), transparent 90%);
+}
+
+.data-table td {
+  padding: 12px 16px;
+  color: var(--default-color);
+  border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+  vertical-align: middle;
+}
+
+.data-table tbody tr {
+  transition: 0.2s;
+}
+
+.data-table tbody tr:hover {
+  background-color: color-mix(in srgb, var(--accent-color), transparent 97%);
+}
+
+.data-table .table-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.data-table .table-actions .btn-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.data-table .table-actions .btn-icon:hover {
+  color: var(--accent-color);
+  background-color: color-mix(in srgb, var(--accent-color), transparent 90%);
+}
+
+@media (max-width: 768px) {
+  .data-table thead {
+    display: none;
+  }
+  .data-table tbody tr {
+    display: block;
+    padding: 12px;
+    border-bottom: 2px solid color-mix(in srgb, var(--default-color), transparent 90%);
+  }
+  .data-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border: none;
+  }
+  .data-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: color-mix(in srgb, var(--default-color), transparent 40%);
+    font-size: 12px;
+  }
+}

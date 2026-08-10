@@ -1,0 +1,44 @@
+/* ----------------------------------------
+   Component: Status Badge - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 50px;
+  text-transform: capitalize;
+}
+
+.status-badge.status-received {
+  color: #6c757d;
+  background: color-mix(in srgb, #6c757d, transparent 90%);
+}
+
+.status-badge.status-preparing {
+  color: #0d6efd;
+  background: color-mix(in srgb, #0d6efd, transparent 90%);
+}
+
+.status-badge.status-ready {
+  color: #6f42c1;
+  background: color-mix(in srgb, #6f42c1, transparent 90%);
+}
+
+.status-badge.status-in-transit {
+  color: #fd7e14;
+  background: color-mix(in srgb, #fd7e14, transparent 90%);
+}
+
+.status-badge.status-delivered {
+  color: #059652;
+  background: color-mix(in srgb, #059652, transparent 90%);
+}
+
+.status-badge.status-cancelled {
+  color: #df1529;
+  background: color-mix(in srgb, #df1529, transparent 90%);
+}

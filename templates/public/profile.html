@@ -1,0 +1,246 @@
+{% extends 'base/customer_base.html' %}
+{% load static %}
+
+{% block title %}My Profile - Yummy Restaurant{% endblock %}
+
+{% block body_class %}profile-page{% endblock %}
+
+{% block customer_extra_head %}
+  <link href="{% static 'public/css/features/profile/profile-redesign.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>{{ page_header_title }}</h2>
+  <p>{{ page_header_desc }}</p>
+</div>
+
+<div class="profile-settings-layout">
+  <!-- Sidebar -->
+  <aside class="profile-settings-sidebar">
+    <div class="sidebar-section-header">{{ sidebar_account_header }}</div>
+    <button type="button" class="sidebar-nav-item active" data-pane="profile">
+      <i class="bi bi-person"></i> {{ profile_nav_label }}
+    </button>
+    <!-- Orders and Notifications removed per request -->
+
+    <div class="sidebar-section-header">{{ sidebar_section_header_preferences }}</div>
+    <button type="button" class="sidebar-nav-item" data-pane="settings">
+      <i class="bi bi-sliders"></i> Settings
+    </button>
+    <a href="{% url 'auth:logout' %}" class="sidebar-nav-item danger" onclick="return confirm('Are you sure you want to sign out?');">
+      <i class="bi bi-box-arrow-right"></i> Sign Out
+    </a>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="profile-settings-main">
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="border-radius:10px;font-size:13px;margin-bottom:20px;">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <!-- Profile Pane -->
+    <div class="settings-pane" id="pane-profile">
+      <div class="settings-section">
+        <h3 class="settings-section-title">{{ profile_section_title }}</h3>
+        <p class="settings-section-desc">{{ personal_info_desc }}</p>
+
+        <form method="post" class="profile-form" novalidate enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <!-- Avatar Upload Section -->
+          <div class="avatar-upload-row">
+            <div class="avatar-preview-wrapper">
+              <img class="avatar-preview-img"
+                   src="{% if customer.avatar %}{{ customer.avatar.url }}{% endif %}"
+                   alt="{{ customer.full_name }}"
+                   {% if not customer.avatar %}style="display:none"{% endif %}>
+              <div class="avatar-preview-placeholder"
+                   {% if customer.avatar %}style="display:none"{% endif %}>
+                {{ customer.full_name|first|upper }}
+              </div>
+              <div class="avatar-overlay">
+                {{ form.avatar }}
+              </div>
+            </div>
+            <div class="avatar-actions">
+              <button type="button" class="upload-btn" onclick="document.getElementById('{{ form.avatar.id_for_label }}').click()">
+                <i class="bi bi-cloud-arrow-up"></i> {{ upload_image_label }}
+              </button>
+              <button type="button" class="remove-btn" id="avatarRemoveBtn"
+                      {% if not customer.avatar %}style="display:none"{% endif %}>
+                <i class="bi bi-trash3"></i> {{ remove_image_label }}
+              </button>
+              <input type="checkbox" name="avatar_clear" id="avatarClearInput" style="display:none">
+              {% if form.avatar.errors %}
+                <div class="form-error visible">{{ form.avatar.errors.0 }}</div>
+              {% endif %}
+              <p class="file-hint">{{ file_hint }}</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="{{ form.full_name.id_for_label }}">{{ full_name_label }}</label>
+            <input type="text"
+                   class="profile-input{% if form.full_name.errors %} has-error{% endif %}"
+                   id="{{ form.full_name.id_for_label }}"
+                   name="{{ form.full_name.html_name }}"
+                   placeholder="{{ form.full_name.field.widget.attrs.placeholder }}"
+                   value="{{ form.full_name.value|default:'' }}">
+            {% if form.full_name.help_text %}<div class="form-helper">{{ form.full_name.help_text }}</div>{% endif %}
+            {% if form.full_name.errors %}<div class="form-error visible">{{ form.full_name.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <div class="email-readonly">
+              <span class="email-value">{{ user.email|default:"No email set" }}</span>
+              <span class="email-badge">Used to log in</span>
+            </div>
+            <div class="form-helper">{{ email_description }}</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="{{ form.phone_number.id_for_label }}">{{ phone_number_label }}</label>
+            <input type="tel"
+                   class="profile-input{% if form.phone_number.errors %} has-error{% endif %}"
+                   id="{{ form.phone_number.id_for_label }}"
+                   name="{{ form.phone_number.html_name }}"
+                   placeholder="{{ form.phone_number.field.widget.attrs.placeholder }}"
+                   value="{{ form.phone_number.value|default:'' }}">
+            {% if form.phone_number.help_text %}<div class="form-helper">{{ form.phone_number.help_text }}</div>{% endif %}
+            {% if form.phone_number.errors %}<div class="form-error visible">{{ form.phone_number.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="{{ form.address.id_for_label }}">{{ address_label }}</label>
+            <textarea class="profile-input profile-textarea{% if form.address.errors %} has-error{% endif %}"
+                      id="{{ form.address.id_for_label }}"
+                      name="{{ form.address.html_name }}"
+                      placeholder="{{ form.address.field.widget.attrs.placeholder }}"
+                      rows="3">{{ form.address.value|default:'' }}</textarea>
+            {% if form.address.help_text %}<div class="form-helper">{{ form.address.help_text }}</div>{% endif %}
+            {% if form.address.errors %}<div class="form-error visible">{{ form.address.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary"><i class="bi bi-check-lg"></i> {{ save_changes_label }}</button>
+            <a href="{% url 'customers:profile' %}" class="btn-secondary">{{ cancel_label }}</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Settings Pane -->
+    <div class="settings-pane" id="pane-settings" style="display:none;">
+      <div class="settings-section">
+        <h3 class="settings-section-title">Notifications</h3>
+        <p class="settings-section-desc">Choose what notifications you receive.</p>
+        <div class="settings-toggle-list">
+          <label class="settings-toggle-item">
+            <div class="toggle-info">
+              <div class="toggle-icon"><i class="bi bi-bell"></i></div>
+              <div>
+                <div class="toggle-label">Push Notifications</div>
+                <div class="toggle-desc">Receive alerts in-browser</div>
+              </div>
+            </div>
+            <div class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </div>
+          </label>
+          <label class="settings-toggle-item">
+            <div class="toggle-info">
+              <div class="toggle-icon"><i class="bi bi-envelope"></i></div>
+              <div>
+                <div class="toggle-label">Email Order Updates</div>
+                <div class="toggle-desc">Get emails when your order status changes</div>
+              </div>
+            </div>
+            <div class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="settings-section danger-zone">
+        <h3 class="settings-section-title">Account</h3>
+        <p class="settings-section-desc">Sign out of your account on this device.</p>
+        <a href="{% url 'auth:logout' %}" class="sign-out-link" onclick="return confirm('Are you sure you want to sign out?');">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.querySelectorAll('[data-pane]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var paneId = this.getAttribute('data-pane');
+      document.querySelectorAll('.sidebar-nav-item[data-pane]').forEach(function(b) {
+        b.classList.remove('active');
+      });
+      this.classList.add('active');
+      document.querySelectorAll('.settings-pane').forEach(function(p) {
+        p.style.display = 'none';
+      });
+      var target = document.getElementById('pane-' + paneId);
+      if (target) target.style.display = '';
+    });
+  });
+
+  // Avatar upload preview & removal
+  (function() {
+    const avatarInput = document.getElementById('{{ form.avatar.id_for_label }}');
+    const removeBtn = document.getElementById('avatarRemoveBtn');
+    const clearInput = document.getElementById('avatarClearInput');
+    const placeholder = document.querySelector('.avatar-preview-placeholder');
+    const img = document.querySelector('.avatar-preview-img');
+
+    if (!avatarInput) return;
+
+    avatarInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        if (placeholder) placeholder.style.display = 'none';
+        if (img) {
+          img.src = ev.target.result;
+          img.style.display = 'block';
+        }
+        if (removeBtn) removeBtn.style.display = 'inline-flex';
+        if (clearInput) clearInput.checked = false;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    if (removeBtn) {
+      removeBtn.addEventListener('click', function() {
+        avatarInput.value = '';
+        if (img) {
+          img.src = '';
+          img.style.display = 'none';
+        }
+        if (placeholder) placeholder.style.display = 'flex';
+        removeBtn.style.display = 'none';
+        if (clearInput) clearInput.checked = true;
+      });
+    }
+  })();
+</script>
+{% endblock %}

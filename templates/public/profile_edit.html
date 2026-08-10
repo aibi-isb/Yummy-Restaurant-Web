@@ -1,0 +1,17 @@
+{% extends 'base/customer_base.html' %}
+{% load static %}
+
+{% block title %}Edit Profile - Yummy Restaurant{% endblock %}
+
+{% block body_class %}profile-page{% endblock %}
+
+{% block content %}
+<div class="profile-settings-layout" style="justify-content:center;">
+  <div class="profile-settings-main" style="max-width:400px;text-align:center;padding:60px 0;">
+    <i class="bi bi-arrow-counterclockwise" style="font-size:40px;color:var(--accent-color);opacity:.6;display:block;margin-bottom:16px;"></i>
+    <h3 style="font-size:18px;font-weight:600;color:var(--heading-color);margin:0 0 8px;">Redirecting...</h3>
+    <p style="font-size:13px;color:color-mix(in srgb, var(--default-color), transparent 40%);">The profile editor has moved. Taking you to the new settings page...</p>
+  </div>
+</div>
+<script>window.location.href = "{% url 'customers:profile' %}";</script>
+{% endblock %}

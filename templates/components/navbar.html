@@ -1,0 +1,80 @@
+{% load static %}
+{% with view_name=request.resolver_match.view_name %}
+<header id="header" class="header d-flex align-items-center sticky-top">
+  <div class="container position-relative d-flex align-items-center justify-content-between">
+    <a href="{% url 'menu:home' %}" class="logo d-flex align-items-center me-auto me-md-0">
+      {% if site_config.logo %}
+        <img src="{{ site_config.logo.url }}" alt="{{ site_config.restaurant_name }}" style="height:36px;margin-right:12px;">
+      {% else %}
+        <svg width="55" height="36" viewBox="0 0 23.999983 15.679575" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="flex-shrink:0;margin-right:12px;">
+          <path d="m 14.553006,0.02393792 c 1.1289,-0.1199671 2.8077,0.2278431 3.852,0.6668771 2.2721,0.95504498 3.8594,2.66132498 4.803,4.91052498 1.0473,2.51049 1.0562,5.33396 0.0249,7.85106 -0.2391,0.5827 -0.8703,1.9992 -1.4567,2.1346 -0.5686,0.1313 -2.1021,0.0808 -2.7236,0.0811 l -4.1905,6e-4 -3.5194,0.0022 c -0.5605,10e-5 -2.0480002,0.0591 -2.4609002,-0.132 -0.5756,-0.2664 -1.5534,-1.8492 -1.7825,-2.4398 -1.0957,0.0286 -2.2064,-0.0095 -3.3035,0.0073 -0.2098,0.0033 -0.5042,0.0089 -0.6702,-0.137 -0.2801,-0.2463 -0.1554,-0.7481 0.2353,-0.7862 0.4395,-0.037 0.8909,-0.0231 1.3317,-0.0225 l 2.4999,0.0011 0.6696,-0.0036 c 0.4487,-0.3006 0.5408,-0.6375 0.065,-0.9747 -0.6451,-0.0243 -1.3529,-0.0135 -2.0032,-0.0148 l -3.5256,-0.0014 c -0.5913,1e-4 -1.1882,0.0042 -1.77939996,-0.005 -0.1753,-0.0055 -0.4163,-0.0255 -0.5298,-0.1857 -0.2112,-0.2979 -0.0085,-0.5651 0.209,-0.7471 0.2716,-0.0298 0.6428,-0.0193 0.92439996,-0.0187 l 1.4389,0.0039 4.342,-0.0048 c 0.5563,-10e-5 1.1319,0.0168 1.6872,-0.0015 0.1346,-0.0111 0.2453,-0.0453 0.3552,-0.1205 0.3723,-0.2568 0.1816,-0.85955 -0.2541,-0.87769 -0.4776,-0.01989 -0.9802,-0.00526 -1.4591,-0.00561 l -2.9848,-0.00546 c -0.525,-4.3e-4 -1.0447,0.0033 -1.5703,-0.00688 -0.6222,-0.01203 -0.8006,-0.51166 -0.3167,-0.89855 0.9054,-0.16383 4.9847,0.10515 5.3835,-0.11819 0.1014,-0.05681 0.1708,-0.19596 0.2057,-0.30354 0.0392,-0.12108 0.007,-0.25368 -0.0512,-0.36341 -0.2558,-0.48195 -1.261,-0.14378 -1.7065,-0.28452 -0.1242,-0.14421 0.0577,-0.61347 0.1109,-0.78701 0.407,-1.33089 1.0961,-2.55842 2.0203,-3.59888 1.5628,-1.77878 3.8035002,-2.66710398 6.1295002,-2.81422208 z M 9.7256058,13.4606 l 5.8255002,-0.0047 5.4393,-0.0078 c -0.0226,-0.2714 -0.0448,-0.6017 -0.0933,-0.865 -0.2286,-1.2494 -0.8873,-2.3794 -1.862,-3.19363 -0.7812,-0.66242 -1.8083,-1.11759 -2.8175,-1.2554 -0.1344,-0.01838 -0.4793,-0.04094 -0.5713,-0.12833 0.0238,-0.26752 0.5651,-0.26949 0.544,-0.58573 -0.0372,-0.55147 -0.5629,-0.6835 -1.0014,-0.62582 -0.3523,0.04499 -0.6423,0.24474 -... (line truncated to 2000 chars)
+          <path d="m 16.564506,8.91958 c 0.1098,-0.01028 0.1751,0.01153 0.2765,0.03911 1.247,0.33934 2.2468,1.14081 2.8375,2.29361 0.1649,0.3219 0.5278,1.1456 0.4183,1.4974 -0.1854,0.0754 -0.3821,0.0521 -0.5813,0.0452 -0.0958,-0.3133 -0.1452,-0.618 -0.2558,-0.9286 -0.4676,-1.3036 -1.4386,-2.36518 -2.6952,-2.94672 z" fill="#ac2b28"/>
+        </svg>
+      {% endif %}
+      <h1 class="sitename">{{ site_config.restaurant_name|default:'Yummy' }}</h1>
+      <span>.</span>
+    </a>
+
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="{% url 'menu:home' %}"{% if view_name == 'menu:home' %} class="active"{% endif %}>Home</a></li>
+        <li><a href="{% url 'menu:list' %}"{% if view_name == 'menu:list' or view_name == 'menu:detail' %} class="active"{% endif %}>Menu</a></li>
+        <li><a href="{% url 'orders:cart' %}"{% if view_name == 'orders:cart' %} class="active"{% endif %}>Cart {% if cart_count %}<span class="badge cart-count">{{ cart_count }}</span>{% endif %}</a></li>
+        {% if user.is_authenticated %}
+          {% if user.is_staff %}
+            <li><a href="{% url 'dashboard:home' %}"{% if view_name|slice:':10' == 'dashboard:' %} class="active"{% endif %}>Admin Panel</a></li>
+          {% else %}
+            <li><a href="{% url 'orders:list' %}"{% if view_name == 'orders:list' %} class="active"{% endif %}>Orders</a></li>
+          {% endif %}
+        {% endif %}
+      </ul>
+      <i class="mobile-nav-toggle d-md-none bi bi-list"></i>
+    </nav>
+
+    {% if user.is_authenticated %}
+      <div class="d-flex align-items-center gap-2">
+        <a href="{% url 'notifications:list' %}" class="notif-bell-link" title="Notifications">
+          <i class="bi bi-bell" style="font-size:18px;line-height:1;"></i>
+          {% if notification_count %}
+            <span class="badge rounded-pill notif-count-badge">{{ notification_count }}</span>
+          {% endif %}
+        </a>
+        <div class="dropdown user-profile-dropdown">
+        <button class="btn dropdown-toggle user-profile-btn" data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="user-avatar-initial">
+            {% if user.is_staff %}
+              {% if site_config.admin_avatar %}
+                <img class="user-avatar-img" src="{{ site_config.admin_avatar.url }}" alt="{{ user.username }}">
+              {% else %}
+                {{ user.get_full_name|first|upper|default:user.username|first|upper }}
+              {% endif %}
+            {% else %}
+              {% if user.profile.avatar %}
+                <img class="user-avatar-img" src="{{ user.profile.avatar.url }}" alt="{{ user.profile.full_name }}">
+              {% else %}
+                {{ user.profile.full_name|first|upper }}
+              {% endif %}
+            {% endif %}
+          </span>
+          <span class="user-name-label">{{ user.username }}</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          {% if user.is_staff %}
+            <li><a class="dropdown-item" href="{% url 'dashboard:home' %}">Admin Panel</a></li>
+          {% else %}
+            <li><a class="dropdown-item" href="{% url 'customers:profile' %}">My Profile</a></li>
+            
+            <li><a class="dropdown-item" href="{% url 'customers:dashboard' %}">My Dashboard</a></li>
+            
+          {% endif %}
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-danger" href="{% url 'auth:logout' %}" onclick="return confirm('Are you sure you want to sign out?');">Logout</a></li>
+        </ul>
+      </div>
+      </div>
+    {% else %}
+      <a class="btn-getstarted" href="{% url 'auth:login' %}">Sign In</a>
+    {% endif %}
+  </div>
+</header>
+{% endwith %}

@@ -1,0 +1,49 @@
+{% extends 'base/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page-heading">
+  <div class="page-heading-copy">
+    <span class="page-icon"><i class="bi bi-bell"></i></span>
+    <div>
+      <p class="eyebrow mb-1">Notification Management</p>
+      <h1 class="h3 mb-1">Notifications</h1>
+      <p class="text-muted mb-0">View customer notifications.</p>
+    </div>
+  </div>
+  <div class="heading-actions">
+    <a class="btn btn-primary btn-sm" href="{% url 'dashboard:notifications_create' %}"><i class="bi bi-send"></i> Send Notification</a>
+  </div>
+</div>
+
+<section class="panel">
+  <div class="panel-header">
+    <h2 class="h5 mb-0 section-title"><i class="bi bi-list-ul"></i><span>All Notifications</span></h2>
+  </div>
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead><tr><th>Title</th><th>Customer</th><th>Type</th><th>Read</th><th>Date</th><th class="text-end">Actions</th></tr></thead>
+      <tbody>
+        {% for notification in notifications %}
+          <tr>
+            <td>{{ notification.title }}</td>
+            <td>{{ notification.customer.full_name }}</td>
+            <td>{{ notification.get_notification_type_display }}</td>
+            <td>{% if notification.is_read %}<span class="badge text-bg-success">Read{% else %}<span class="badge text-bg-warning">Unread{% endif %}</span></td>
+            <td>{{ notification.created_at|date:"M d, Y H:i" }}</td>
+            <td class="text-end">
+              <form method="post" action="{% url 'dashboard:notifications_delete' notification.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this notification?')">Delete</button>
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="6" class="text-center text-muted">No notifications found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if is_paginated %}{% include 'components/pagination.html' %}{% endif %}
+</section>
+{% endblock %}

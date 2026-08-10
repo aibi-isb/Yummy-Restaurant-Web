@@ -1,0 +1,25 @@
+/* ----------------------------------------
+   Component: Availability Badge - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.availability-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.availability-badge.in-stock {
+  color: #059652;
+  background: color-mix(in srgb, #059652, transparent 90%);
+}
+
+.availability-badge.out-of-stock {
+  color: #df1529;
+  background: color-mix(in srgb, #df1529, transparent 90%);
+}

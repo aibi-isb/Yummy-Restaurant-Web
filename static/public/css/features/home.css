@@ -1,0 +1,153 @@
+/* ----------------------------------------
+   Homepage Featured Meal Cards
+---------------------------------------- */
+
+.featured-meals .row {
+  align-items: stretch;
+}
+
+.featured-meals .featured-meal-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface-color);
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.featured-meals .featured-meal-card:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--accent-color), transparent 70%);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.12);
+}
+
+.featured-meals .featured-meal-image-link {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: color-mix(in srgb, var(--accent-color), transparent 94%);
+}
+
+.featured-meals .featured-meal-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.featured-meals .featured-meal-card:hover .featured-meal-image {
+  transform: scale(1.06);
+}
+
+.featured-meals .featured-meal-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 22px 22px 24px;
+}
+
+.featured-meals .featured-meal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.featured-meals .featured-meal-title {
+  min-height: 2.1em;
+  margin: 0;
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1.05;
+}
+
+.featured-meals .featured-meal-title a {
+  color: var(--heading-color);
+}
+
+.featured-meals .featured-meal-title a:hover {
+  color: var(--accent-color);
+}
+
+.featured-meals .featured-meal-price {
+  flex-shrink: 0;
+  padding-top: 3px;
+  color: var(--accent-color);
+  font-size: 20px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.featured-meals .featured-meal-description {
+  display: -webkit-box;
+  min-height: 4.8em;
+  overflow: hidden;
+  margin: 12px 0 0;
+  color: color-mix(in srgb, var(--default-color), transparent 35%);
+  font-family: var(--nav-font);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.featured-meals .featured-meal-form {
+  width: 100%;
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.featured-meals .featured-meal-order {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 7px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 50px;
+  color: var(--contrast-color);
+  background: var(--accent-color);
+  font-family: var(--nav-font);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.featured-meals .featured-meal-order:hover {
+  color: var(--contrast-color);
+  background: color-mix(in srgb, var(--accent-color), transparent 15%);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--accent-color), transparent 72%);
+  transform: translateY(-1px);
+}
+
+.featured-meals .featured-meal-order:focus-visible,
+.featured-meals .featured-meal-title a:focus-visible,
+.featured-meals .featured-meal-image-link:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent-color), transparent 55%);
+  outline-offset: 3px;
+}
+
+.featured-meals .admin-featured-actions {
+  border-color: color-mix(in srgb, var(--default-color), transparent 90%) !important;
+}
+
+@media (max-width: 575px) {
+  .featured-meals .featured-meal-content {
+    padding: 20px 18px 20px;
+  }
+
+  .featured-meals .featured-meal-title {
+    font-size: 25px;
+  }
+
+  .featured-meals .featured-meal-price {
+    font-size: 18px;
+  }
+}

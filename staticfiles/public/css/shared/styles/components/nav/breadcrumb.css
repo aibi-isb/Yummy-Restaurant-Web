@@ -1,0 +1,41 @@
+/* ----------------------------------------
+   Component: Breadcrumb - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.breadcrumb-nav {
+  padding: 15px 0;
+}
+
+.breadcrumb-nav ol {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+}
+
+.breadcrumb-nav ol li + li {
+  padding-left: 8px;
+}
+
+.breadcrumb-nav ol li + li::before {
+  content: "/";
+  display: inline-block;
+  padding-right: 8px;
+  color: color-mix(in srgb, var(--default-color), transparent 70%);
+}
+
+.breadcrumb-nav ol li a {
+  color: color-mix(in srgb, var(--default-color), transparent 30%);
+  transition: 0.3s;
+}
+
+.breadcrumb-nav ol li a:hover {
+  color: var(--accent-color);
+}
+
+.breadcrumb-nav ol li.current {
+  color: var(--default-color);
+  font-weight: 500;
+}

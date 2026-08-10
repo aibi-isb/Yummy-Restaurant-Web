@@ -1,0 +1,56 @@
+{% extends 'base/customer_base.html' %}
+{% load static %}
+
+{% block title %}Notification Detail - Yummy Restaurant{% endblock %}
+
+{% block body_class %}notification-detail-page{% endblock %}
+
+{% block customer_extra_head %}
+  <link href="{% static 'public/css/features/notification_detail.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h2>Notification Detail</h2>
+    <p>From: <strong>{{ notification.sender|default:"Yummy Restaurant" }}</strong></p>
+    <p>To: <strong>{{ request.user.profile.full_name }}</strong></p>
+  </div>
+
+  <div class="notification-detail-card">
+    <h3 class="notif-title">{{ notification.title }}</h3>
+    <p class="notif-message">{{ notification.message }}</p>
+    <p class="notif-type"><strong>Type:</strong> {{ notification.notification_type }}</p>
+    <p class="notif-time"><strong>Received:</strong> {{ notification.created_at }}</p>
+  </div>
+
+  {% if order %}
+    <div class="order-section">
+      <h4>Associated Order</h4>
+      <p><strong>Order #: </strong> {{ order.order_number }}</p>
+      <p><strong>Status:</strong> {{ order.status }}</p>
+      <p><strong>Total:</strong> {{ currency_symbol }}{{ order.total_amount }}</p>
+      <table class="order-items-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in order.items.all %}
+            <tr>
+              <td>{{ item.food.name }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ currency_symbol }}{{ item.unit_price }}</td>
+              <td>{{ currency_symbol }}{{ item.subtotal }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+
+  <a href="{% url 'notifications:list' %}" class="btn btn-secondary mt-3">Back to Notifications</a>
+{% endblock %}

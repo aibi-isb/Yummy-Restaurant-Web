@@ -1,0 +1,74 @@
+/* ----------------------------------------
+   Component: Timeline - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.timeline {
+  position: relative;
+  padding-left: 28px;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background-color: color-mix(in srgb, var(--default-color), transparent 85%);
+}
+
+.timeline .timeline-item {
+  position: relative;
+  padding-bottom: 24px;
+}
+
+.timeline .timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline .timeline-item .timeline-dot {
+  position: absolute;
+  left: -24px;
+  top: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--surface-color);
+  border: 2px solid color-mix(in srgb, var(--default-color), transparent 70%);
+  z-index: 1;
+}
+
+.timeline .timeline-item.completed .timeline-dot {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.timeline .timeline-item.active .timeline-dot {
+  background-color: var(--surface-color);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color), transparent 70%);
+}
+
+.timeline .timeline-item .timeline-content {
+  padding-left: 8px;
+}
+
+.timeline .timeline-item .timeline-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--heading-color);
+}
+
+.timeline .timeline-item .timeline-time {
+  font-size: 12px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+}
+
+.timeline .timeline-item.completed .timeline-label {
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
+}
+
+.timeline .timeline-item.active .timeline-label {
+  color: var(--accent-color);
+  font-weight: 600;
+}

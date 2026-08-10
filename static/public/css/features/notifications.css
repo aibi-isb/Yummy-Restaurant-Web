@@ -1,0 +1,231 @@
+/* ----------------------------------------
+   Notifications Feature Styles
+---------------------------------------- */
+.notifications-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.notifications-header .btn-yummy-sm {
+  font-size: 11px;
+  padding: 6px 12px;
+}
+
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item:hover {
+  background-color: color-mix(in srgb, var(--accent-color), transparent 97%);
+  margin: 0 -12px;
+  padding: 16px 12px;
+  border-radius: 4px;
+}
+
+.notification-item.unread {
+  background-color: color-mix(in srgb, var(--accent-color), transparent 97%);
+  margin: 0 -12px;
+  padding: 16px 12px;
+  border-radius: 4px;
+  border-bottom-color: transparent;
+}
+
+.notification-item .notif-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  background-color: color-mix(in srgb, var(--accent-color), transparent 90%);
+  color: var(--accent-color);
+}
+
+.notification-item .notif-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-item .notif-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--heading-color);
+  margin-bottom: 2px;
+}
+
+.notification-item.unread .notif-title {
+  color: var(--accent-color);
+}
+
+.notification-item .notif-message {
+  font-size: 13px;
+  color: color-mix(in srgb, var(--default-color), transparent 30%);
+  line-height: 1.4;
+}
+
+.notification-item .notif-time {
+  font-size: 11px;
+  color: color-mix(in srgb, var(--default-color), transparent 50%);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.notification-item .notif-unread-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+/* ---- Notification detail (inbox view) ---- */
+.notification-detail {
+  padding: 0;
+}
+
+.notification-detail .detail-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--accent-color);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 20px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.notification-detail .detail-back:hover {
+  text-decoration: underline;
+}
+
+.notification-detail .detail-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+}
+
+.notification-detail .detail-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  background-color: color-mix(in srgb, var(--accent-color), transparent 90%);
+  color: var(--accent-color);
+}
+
+.notification-detail .detail-title-area {
+  flex: 1;
+}
+
+.notification-detail .detail-title {
+  font-size: 18px;
+  font-weight: 600;
+  font-family: var(--heading-font);
+  color: var(--heading-color);
+  margin-bottom: 2px;
+}
+
+.notification-detail .detail-time {
+  font-size: 12px;
+  color: color-mix(in srgb, var(--default-color), transparent 50%);
+}
+
+.notification-detail .detail-body {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--default-color);
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: color-mix(in srgb, var(--surface-color), transparent 50%);
+  border-radius: 5px;
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+}
+
+.notification-detail .detail-order-card {
+  background-color: var(--surface-color);
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+}
+
+.notification-detail .detail-order-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--heading-font);
+  color: var(--heading-color);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+}
+
+.notification-detail .detail-order-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 13px;
+}
+
+.notification-detail .detail-order-row .label {
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+}
+
+.notification-detail .detail-order-row .value {
+  font-weight: 500;
+  color: var(--default-color);
+}
+
+.notification-detail .detail-order-items {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+}
+
+.notification-detail .detail-order-items .item-chip {
+  display: inline-block;
+  font-size: 12px;
+  padding: 3px 10px;
+  background-color: color-mix(in srgb, var(--accent-color), transparent 92%);
+  color: var(--accent-color);
+  border-radius: 50px;
+  margin: 3px 4px 3px 0;
+}
+
+.notification-detail .detail-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}

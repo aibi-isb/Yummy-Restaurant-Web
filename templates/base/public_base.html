@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+  <link href="{% static 'public/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'public/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'public/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'public/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'public/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  <link href="{% static 'public/css/main.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body_class %}index-page{% endblock %}
+
+{% block body %}
+  {% include 'components/navbar.html' %}
+
+  <main class="main">
+    {% include 'components/alerts.html' %}
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include 'components/footer.html' %}
+
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <div id="preloader"></div>
+
+  <script src="{% static 'public/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'public/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'public/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'public/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'public/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'public/js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+{% endblock %}

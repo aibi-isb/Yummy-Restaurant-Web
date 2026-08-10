@@ -1,0 +1,48 @@
+/* ----------------------------------------
+   Component: Statistics Card - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.statistics-card {
+  background-color: var(--surface-color);
+  border-radius: 5px;
+  padding: 24px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: 0.3s;
+}
+
+.statistics-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.12);
+}
+
+.statistics-card .stat-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 24px;
+  flex-shrink: 0;
+  background: color-mix(in srgb, var(--accent-color), transparent 90%);
+  color: var(--accent-color);
+}
+
+.statistics-card .stat-content {
+  flex: 1;
+}
+
+.statistics-card .stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--heading-color);
+  line-height: 1.2;
+}
+
+.statistics-card .stat-label {
+  font-size: 13px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+}

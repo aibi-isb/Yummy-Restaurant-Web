@@ -1,0 +1,13 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}403 - Forbidden{% endblock %}
+
+{% block body %}
+<div class="container text-center py-5" style="margin-top: 100px;">
+  <h1 style="font-size: 80px; color: var(--accent-color, #ce1212);">403</h1>
+  <h2>Access Denied</h2>
+  <p>You do not have permission to access this page.</p>
+  <a href="{% url 'menu:list' %}" class="btn-get-started">Go Home</a>
+</div>
+{% endblock %}

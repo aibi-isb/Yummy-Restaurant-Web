@@ -1,0 +1,193 @@
+{% extends 'base/public_base.html' %}
+{% load static %}
+
+{% block title %}YUMMI - Restaurant Online Ordering{% endblock %}
+
+{% block extra_head %}
+  {{ block.super }}
+  <link href="{% static 'public/css/features/home.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<section id="hero" class="hero section light-background">
+  <div class="container">
+    <div class="row gy-4 justify-content-center justify-content-lg-between">
+      <div class="col-lg-5 order-2 order-lg-1 d-flex flex-column justify-content-center">
+        <h1 data-aos="fade-up">Order Delicious<br>Food Online</h1>
+        <p data-aos="fade-up" data-aos-delay="100">Browse our menu, place your order, and enjoy restaurant-quality meals delivered to your door.</p>
+        <div class="d-flex" data-aos="fade-up" data-aos-delay="200">
+          <a href="{% url 'menu:list' %}" class="btn-get-started">Start Ordering</a>
+          <a href="{% url 'menu:list' %}" class="btn-watch-video d-flex align-items-center"><i class="bi bi-egg-fried"></i><span>View Menu</span></a>
+        </div>
+      </div>
+      <div class="col-lg-5 order-1 order-lg-2 hero-img" data-aos="zoom-out">
+        <img src="{% static 'public/img/hero-img.png' %}" class="img-fluid animated" alt="">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="about section">
+  <div class="container section-title" data-aos="fade-up">
+    <h2>About Us</h2>
+    <p><span>Learn More</span> <span class="description-title">About Yummy</span></p>
+  </div>
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row gy-4">
+      <div class="col-lg-6 position-relative align-self-start">
+        <img src="{% static 'public/img/about.jpg' %}" class="img-fluid" alt="">
+      </div>
+      <div class="col-lg-6 content d-flex flex-column justify-content-center">
+        <h3>Experience Exceptional Dining at YUMMY Restaurant</h3>
+        <p>At YUMMY Restaurant, we believe that every meal should be a memorable experience. We combine the rich flavors of Sierra Leone with carefully selected international cuisines, using fresh ingredients and expertly crafted recipes to delight every guest.</p>
+        <p>Whether you're craving a quick lunch, a family dinner, or a gourmet meal for a special occasion, our chefs prepare every dish with passion, quality, and attention to detail. Through our online ordering platform, you can browse our menu, place orders, make secure dummy payments, and track your order from preparation to delivery—all from the comfort of your home.</p>
+        <p>Our commitment is simple: exceptional food, outstanding service, and customer satisfaction every time.</p>
+        <ul>
+          <li><i class="bi bi-check2-all"></i> Freshly prepared meals every day</li>
+          <li><i class="bi bi-check2-all"></i> Fast and reliable delivery service</li>
+          <li><i class="bi bi-check2-all"></i> Professional and experienced chefs</li>
+          <li><i class="bi bi-check2-all"></i> Local and international cuisine</li>
+          <li><i class="bi bi-check2-all"></i> Easy online ordering and payment</li>
+          <li><i class="bi bi-check2-all"></i> Premium customer experience</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="menu" class="menu featured-meals section">
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Our Menu</h2>
+    <p><span>Featured</span> <span class="description-title">Meals</span></p>
+  </div>
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row gy-4">
+      {% for food in featured_foods %}
+        <div class="col-lg-4 col-md-6">
+          <article class="featured-meal-card">
+            <a href="{% url 'menu:detail' food.id %}" class="featured-meal-image-link" aria-label="View {{ food.name }} details">
+              {% if food.image %}
+                <img src="{{ food.image.url }}" class="featured-meal-image" alt="{{ food.name }}" loading="lazy">
+              {% else %}
+                <img src="{% static 'public/img/food-placeholder.jpg' %}" class="featured-meal-image" alt="{{ food.name }}" loading="lazy">
+              {% endif %}
+            </a>
+
+            <div class="featured-meal-content">
+              <div class="featured-meal-header">
+                <h3 class="featured-meal-title">
+                  <a href="{% url 'menu:detail' food.id %}">{{ food.name }}</a>
+                </h3>
+                <span class="featured-meal-price">{{ currency_symbol }}{{ food.price }}</span>
+              </div>
+
+              <p class="featured-meal-description">{{ food.description|truncatewords:15 }}</p>
+
+              <form method="post" action="{% url 'orders:cart' %}" class="featured-meal-form">
+                {% csrf_token %}
+                <input type="hidden" name="food_id" value="{{ food.id }}">
+                <input type="hidden" name="action" value="add">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="btn-get-started featured-meal-order">
+                  <i class="bi bi-cart-plus" aria-hidden="true"></i> Order Now
+                </button>
+              </form>
+
+              {% if user.is_authenticated and user.is_staff %}
+                <div class="admin-featured-actions mt-2 pt-2 border-top d-flex gap-2 justify-content-center">
+                  <a href="{% url 'dashboard:foods_edit' food.id %}" class="btn btn-warning btn-sm" style="font-size:12px;padding:4px 8px;"><i class="bi bi-pencil-square"></i> Edit</a>
+                  <form method="post" action="{% url 'dashboard:foods_delete' food.id %}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete {{ food.name }}?');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm" style="font-size:12px;padding:4px 8px;"><i class="bi bi-trash"></i> Delete</button>
+                  </form>
+                </div>
+              {% endif %}
+            </div>
+          </article>
+        </div>
+      {% empty %}
+        <p class="text-center">No featured meals available yet.</p>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4" data-aos="fade-up">
+      <a href="{% url 'menu:list' %}" class="btn-get-started">Browse Full Menu</a>
+    </div>
+  </div>
+</section>
+
+<section id="categories" class="section light-background">
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Categories</h2>
+    <p><span>Browse by</span> <span class="description-title">Category</span></p>
+  </div>
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row gy-4 justify-content-center">
+      {% for category in categories %}
+        <div class="col-lg-3 col-md-6">
+          <div class="icon-box d-flex flex-column justify-content-center align-items-center text-center" style="padding:30px;background:var(--surface-color);border-radius:5px;box-shadow:0px 0 30px rgba(0,0,0,0.1);height:100%;">
+            <i class="bi bi-egg-fried" style="font-size:36px;color:var(--accent-color);margin-bottom:12px;"></i>
+            <h4>{{ category.name }}</h4>
+            <a href="{% url 'menu:list' %}?category={{ category.id }}" class="btn-get-started" style="font-size:12px;padding:4px 14px;margin-top:8px;">Browse</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact section light-background">
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Contact</h2>
+    <p><span>Get In</span> <span class="description-title">Touch</span></p>
+  </div>
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row gy-4">
+      <div class="col-md-6">
+        <div class="info-item d-flex align-items-center" data-aos="fade-up" data-aos-delay="200">
+          <i class="icon bi bi-geo-alt flex-shrink-0"></i>
+          <div>
+            <h3>Address</h3>
+            <p>45 Wilkinson Road, Freetown, Western Area, Sierra Leone</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="info-item d-flex align-items-center" data-aos="fade-up" data-aos-delay="300">
+          <i class="icon bi bi-telephone flex-shrink-0"></i>
+          <div>
+            <h3>Call Us</h3>
+            <p>+232 76 123 456<br>+232 88 654 321</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="info-item d-flex align-items-center" data-aos="fade-up" data-aos-delay="400">
+          <i class="icon bi bi-envelope flex-shrink-0"></i>
+          <div>
+            <h3>Email Us</h3>
+            <p>info@yummyrestaurant.sl<br>support@yummyrestaurant.sl</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="info-item d-flex align-items-center" data-aos="fade-up" data-aos-delay="500">
+          <i class="icon bi bi-clock flex-shrink-0"></i>
+          <div>
+            <h3>Opening Hours</h3>
+            <p><strong>Mon-Thu:</strong> 8:00 AM – 10:00 PM<br><strong>Fri-Sat:</strong> 8:00 AM – 11:00 PM<br><strong>Sunday:</strong> 9:00 AM – 9:00 PM</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="info-item d-flex align-items-center" data-aos="fade-up" data-aos-delay="600">
+          <i class="icon bi bi-share flex-shrink-0"></i>
+          <div>
+            <h3>Follow Us</h3>
+            <p>Facebook: YUMMY Restaurant Sierra Leone<br>Instagram: @yummyrestaurant.sl<br>X (Twitter): @YummySL<br>WhatsApp: +232 76 123 456</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

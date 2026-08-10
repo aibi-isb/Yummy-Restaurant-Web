@@ -1,0 +1,44 @@
+/* ----------------------------------------
+   Component: Pagination - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 20px 0;
+}
+
+.pagination .page-btn {
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--default-color);
+  background: none;
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 85%);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.pagination .page-btn:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.pagination .page-btn.active {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--contrast-color);
+}
+
+.pagination .page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

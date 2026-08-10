@@ -1,0 +1,15 @@
+/* ----------------------------------------
+   Theme: Light - YUMMI Restaurant
+   Light theme variables (default)
+---------------------------------------- */
+
+:root {
+  --background-color: #ffffff;
+  --surface-color: #ffffff;
+  --default-color: #3d3d3d;
+  --heading-color: #1a1a1a;
+  --nav-color: #3d3d3d;
+  --nav-hover-color: #ce1212;
+  --contrast-color: #ffffff;
+  --accent-color: #ce1212;
+}

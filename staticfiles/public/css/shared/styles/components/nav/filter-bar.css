@@ -1,0 +1,42 @@
+/* ----------------------------------------
+   Component: Filter Bar - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 15px 0;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--nav-font);
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
+  background-color: var(--surface-color);
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 85%);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.filter-chip:hover {
+  color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.filter-chip.active {
+  color: var(--contrast-color);
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.filter-chip i {
+  font-size: 14px;
+}

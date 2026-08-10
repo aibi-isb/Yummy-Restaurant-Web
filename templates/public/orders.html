@@ -1,0 +1,148 @@
+{% extends 'base/customer_base.html' %}
+{% load static %}
+
+{% block title %}Order History - Yummy Restaurant{% endblock %}
+
+{% block body_class %}order-history-page{% endblock %}
+
+{% block customer_extra_head %}
+  <link href="{% static 'public/css/features/orders.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Order History</h2>
+  <p>Track and manage all your orders in one place</p>
+</div>
+
+<div class="orders-header">
+  <div class="orders-count">
+    <span class="count-number">{{ paginator.count|default:orders|length }}</span>
+    <span class="count-label">order{{ paginator.count|pluralize }}</span>
+  </div>
+  <div class="orders-filter" role="group" aria-label="Order status filters">
+    <a href="{% url 'orders:list' %}" class="filter-chip {% if not request.GET.status %}active{% endif %}">All</a>
+    <a href="{% url 'orders:list' %}?status=pending" class="filter-chip {% if request.GET.status == 'pending' %}active{% endif %}"><i class="bi bi-hourglass-split"></i> Pending</a>
+    <a href="{% url 'orders:list' %}?status=payment_received" class="filter-chip {% if request.GET.status == 'payment_received' %}active{% endif %}"><i class="bi bi-check2"></i> Payment Received</a>
+    <a href="{% url 'orders:list' %}?status=preparing" class="filter-chip {% if request.GET.status == 'preparing' %}active{% endif %}"><i class="bi bi-fire"></i> Preparing</a>
+    <a href="{% url 'orders:list' %}?status=ready" class="filter-chip {% if request.GET.status == 'ready' %}active{% endif %}"><i class="bi bi-bag-check-fill"></i> Ready</a>
+    <a href="{% url 'orders:list' %}?status=delivered" class="filter-chip {% if request.GET.status == 'delivered' %}active{% endif %}"><i class="bi bi-check-circle-fill"></i> Delivered</a>
+    <a href="{% url 'orders:list' %}?status=cancelled" class="filter-chip {% if request.GET.status == 'cancelled' %}active{% endif %}"><i class="bi bi-x-circle-fill"></i> Cancelled</a>
+  </div>
+  <div class="orders-actions">
+    {% if request.GET.status %}
+      <a href="{% url 'orders:list' %}" class="btn-yummy-text btn-yummy-sm"><i class="bi bi-arrow-counterclockwise"></i> Clear Filters</a>
+    {% endif %}
+    <form method="post" action="{% url 'orders:clear_history' %}" class="d-inline-block" onsubmit="return confirm('This will permanently delete all your order history. Are you sure?');">
+      {% csrf_token %}
+      <button type="submit" class="btn-yummy-outline btn-yummy-sm btn-clear-history"><i class="bi bi-trash3"></i> Clear History</button>
+    </form>
+  </div>
+</div>
+
+{% if orders %}
+<div class="orders-list" role="list">
+  {% for order in orders %}
+  <article class="order-card" role="listitem">
+    <div class="order-header">
+      <div class="order-main-info">
+        <div class="order-id">
+          <span class="order-id-label">Order</span>
+          <span class="order-number">{{ order.order_number }}</span>
+        </div>
+        <div class="order-meta">
+          <span class="order-date"><i class="bi bi-calendar3"></i> {{ order.created_at|date:"M d, Y" }}</span>
+          <span class="order-time"><i class="bi bi-clock"></i> {{ order.created_at|date:"H:i" }}</span>
+        </div>
+      </div>
+      <div class="order-status-group">
+        {% if order.payment %}
+          {% if order.payment.status == 'approved' %}
+            <span class="status-badge status-paid"><i class="bi bi-check-circle-fill"></i> Paid</span>
+          {% elif order.payment.status == 'pending' %}
+            <span class="status-badge status-pending-payment"><i class="bi bi-clock-fill"></i> Payment Pending</span>
+          {% else %}
+            <span class="status-badge status-rejected"><i class="bi bi-x-circle-fill"></i> Payment Failed</span>
+          {% endif %}
+        {% else %}
+          <span class="status-badge status-unpaid"><i class="bi bi-dash-circle"></i> Not Paid</span>
+        {% endif %}
+
+        <span class="status-badge status-{{ order.status }}">
+          {% if order.status == 'pending' %}<i class="bi bi-hourglass-split"></i> Pending
+          {% elif order.status == 'payment_received' %}<i class="bi bi-check2"></i> Payment Received
+          {% elif order.status == 'preparing' %}<i class="bi bi-fire"></i> Preparing
+          {% elif order.status == 'ready' %><i class="bi bi-bag-check-fill"></i> Ready
+          {% elif order.status == 'delivered' %}<i class="bi bi-check-circle-fill"></i> Delivered
+          {% else %}<i class="bi bi-x-circle-fill"></i> {{ order.get_status_display }}
+          {% endif %}
+        </span>
+      </div>
+    </div>
+
+    <div class="order-items">
+      {% for item in order.items.all %}
+      <div class="order-item">
+        <div class="item-thumb">
+          {% if item.food.image %}
+          <img src="{{ item.food.image.url }}" alt="{{ item.food.name }}" class="item-thumb-img" loading="lazy">
+          {% else %}
+          <span class="item-thumb-img placeholder"><i class="bi bi-image"></i></span>
+          {% endif %}
+        </div>
+        <div class="item-details">
+          <span class="item-name">{{ item.food.name }}</span>
+        </div>
+        <div class="item-qty-price">
+          <span class="item-qty">×{{ item.quantity }}</span>
+          <span class="item-price">{{ currency_symbol }}{{ item.subtotal }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="order-summary">
+      <div class="summary-left">
+        <div class="delivery-info">
+          <i class="bi bi-geo-alt-fill"></i>
+          <span>{{ order.delivery_address|truncatechars:60 }}</span>
+        </div>
+      </div>
+      <div class="summary-right">
+        <span class="total-label">Total</span>
+        <span class="total-amount">{{ currency_symbol }}{{ order.total_amount }}</span>
+      </div>
+    </div>
+
+    <div class="order-footer">
+      <a href="{% url 'orders:track' order.id %}" class="btn-yummy-outline btn-yummy-sm"><i class="bi bi-eye"></i> Details</a>
+      {% if order.payment and order.payment.status != 'approved' and order.status == 'pending' %}
+        <a href="{% url 'payments:checkout' order.id %}" class="btn-yummy btn-yummy-sm"><i class="bi bi-credit-card"></i> Pay Now</a>
+      {% elif not order.payment and order.status == 'pending' %}
+        <a href="{% url 'payments:checkout' order.id %}" class="btn-yummy btn-yummy-sm"><i class="bi bi-credit-card"></i> Pay Now</a>
+      {% elif order.status in 'pending,payment_received,preparing,ready' %}
+        <a href="{% url 'orders:track' order.id %}" class="btn-yummy btn-yummy-sm"><i class="bi bi-truck"></i> Track</a>
+      {% elif order.status == 'delivered' %}
+        <a href="{% url 'menu:list' %}" class="btn-yummy-outline btn-yummy-sm"><i class="bi bi-bag-plus"></i> Order Again</a>
+      {% else %}
+        <span class="btn-yummy-text disabled"><i class="bi bi-x-circle"></i> Cancelled</span>
+      {% endif %}
+    </div>
+  </article>
+  {% endfor %}
+</div>
+
+{% if is_paginated %}
+  {% include 'components/pagination.html' %}
+{% endif %}
+{% else %}
+<div class="empty-state">
+  <div class="empty-illustration">
+    <i class="bi bi-bag-x"></i>
+  </div>
+  <h4>No orders yet</h4>
+  <p>You haven't placed any orders. Explore our menu and discover something delicious!</p>
+  <a href="{% url 'menu:list' %}" class="btn-yummy btn-yummy-lg"><i class="bi bi-grid-1x2"></i> Browse Menu</a>
+</div>
+{% endif %}
+{% endblock %}

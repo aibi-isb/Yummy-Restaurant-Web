@@ -1,0 +1,44 @@
+/* ----------------------------------------
+   Component: Availability Badge - YUMMI Restaurant
+   Uses color psychology: green=fresh/available, red=unavailable
+   Featured: warm gold/amber → premium, exclusive, appetizing
+---------------------------------------- */
+.availability-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.availability-badge.in-stock {
+  color: #065f46;
+  background: color-mix(in srgb, #10b981, transparent 85%);
+  box-shadow: 0 1px 2px color-mix(in srgb, #10b981, transparent 70%);
+}
+
+.availability-badge.out-of-stock {
+  color: #991b1b;
+  background: color-mix(in srgb, #ef4444, transparent 85%);
+  box-shadow: 0 1px 2px color-mix(in srgb, #ef4444, transparent 70%);
+}
+
+/* Featured Badge - warm gold/amber for premium/exclusive appeal */
+.featured-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #fff;
+  box-shadow: 0 2px 6px color-mix(in srgb, #f59e0b, transparent 60%);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}

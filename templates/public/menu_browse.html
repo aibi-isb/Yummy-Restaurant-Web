@@ -1,0 +1,333 @@
+{% extends 'base/public_base.html' %}
+{% load static %}
+
+{% block title %}Our Menu - Yummy Restaurant{% endblock %}
+
+{% block extra_head %}
+  {{ block.super }}
+  <link href="{% static 'public/css/shared/styles/components/components.css' %}" rel="stylesheet">
+  <link href="{% static 'public/css/features/menu.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body_class %}search-page{% endblock %}
+
+{% block content %}
+<div class="page-title" data-aos="fade">
+  <div class="container">
+    <h1>Our Menu</h1>
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a href="{% url 'menu:home' %}">Home</a></li>
+        <li class="current">Menu</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<div class="menu-sidebar-overlay" id="menu-sidebar-overlay"></div>
+
+<section class="section">
+  <div class="container">
+    <div class="menu-layout">
+
+      <aside class="menu-sidebar" id="menu-sidebar">
+        <div class="menu-sidebar-header">
+          <h3>Filters</h3>
+          <button type="button" class="menu-sidebar-close bi bi-x" id="menu-sidebar-close" aria-label="Close filters"></button>
+        </div>
+
+        <form method="get" action="{% url 'menu:list' %}" id="filter-form">
+          {% if search_query %}<input type="hidden" name="query" value="{{ search_query }}">{% endif %}
+          {% if selected_sort %}<input type="hidden" name="sort" value="{{ selected_sort }}">{% endif %}
+
+          <div class="menu-sidebar-section">
+            <h4>Categories</h4>
+            <div class="menu-category-list" id="menu-category-list">
+              <label class="form-checkbox menu-category-item {% if not selected_category %}active{% endif %}">
+                <input type="radio" name="category" value="" {% if not selected_category %}checked{% endif %} onchange="this.form.submit()">
+                All Items
+              </label>
+              {% for cat in categories %}
+                <label class="form-checkbox menu-category-item {% if selected_category|stringformat:'s' == cat.id|stringformat:'s' %}active{% endif %}">
+                  <input type="radio" name="category" value="{{ cat.id }}"
+                         {% if selected_category|stringformat:'s' == cat.id|stringformat:'s' %}checked{% endif %}
+                         onchange="this.form.submit()">
+                  {{ cat.name }}
+                </label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="menu-sidebar-section">
+            <h4>Price Range</h4>
+            <div class="price-range">
+              <div class="price-range-inputs">
+                <div class="form-group" style="margin-bottom:8px;">
+                  <label class="form-label" style="font-size:12px;">Min ({{ currency_symbol }})</label>
+                  <input type="number" class="form-input" name="price_min" value="{{ price_min|default:'0' }}" min="0" style="font-size:13px;padding:6px 10px;">
+                </div>
+                <div class="form-group" style="margin-bottom:8px;">
+                  <label class="form-label" style="font-size:12px;">Max ({{ currency_symbol }})</label>
+                  <input type="number" class="form-input" name="price_max" value="{{ price_max|default:'500' }}" min="0" style="font-size:13px;padding:6px 10px;">
+                </div>
+              </div>
+              <button type="submit" class="btn-yummy btn-yummy-sm" style="width:100%;justify-content:center;font-size:12px;">Apply</button>
+            </div>
+          </div>
+
+          <div class="menu-sidebar-section">
+            <h4>Availability</h4>
+            <input type="hidden" name="available_only" id="avail-input" value="{% if available_only %}1{% else %}0{% endif %}">
+            <label class="form-checkbox" style="font-size:13px;">
+              <input type="checkbox" {% if available_only %}checked{% endif %}
+                     onchange="document.getElementById('avail-input').value = this.checked ? '1' : '0'; this.form.submit();">
+              Show available only
+            </label>
+          </div>
+
+          {% if has_active_filters %}
+            <a href="{% url 'menu:list' %}" class="btn-yummy-outline btn-yummy-sm clear-sidebar-filters">Clear All Filters</a>
+          {% endif %}
+        </form>
+      </aside>
+
+      <div class="menu-content">
+
+        <div class="menu-category-pills d-none d-lg-flex">
+          <a href="{% url 'menu:list' %}{% if search_query %}?query={{ search_query|urlencode }}{% endif %}"
+             class="menu-category-pill {% if not selected_category %}active{% endif %}">All</a>
+          {% for cat in categories %}
+            <a href="{% url 'menu:list' %}?category={{ cat.id }}{% if search_query %}&query={{ search_query|urlencode }}{% endif %}"
+               class="menu-category-pill {% if selected_category|stringformat:'s' == cat.id|stringformat:'s' %}active{% endif %}">
+              {{ cat.name }}
+            </a>
+          {% endfor %}
+        </div>
+
+        <form method="get" action="{% url 'menu:list' %}" id="search-form">
+          {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
+          {% if price_min %}<input type="hidden" name="price_min" value="{{ price_min }}">{% endif %}
+          {% if price_max %}<input type="hidden" name="price_max" value="{{ price_max }}">{% endif %}
+          {% if not available_only %}<input type="hidden" name="available_only" value="0">{% endif %}
+
+          <div class="menu-toolbar">
+            <button type="button"
+                    class="menu-filter-toggle bi bi-funnel"
+                    id="menu-filter-toggle"
+                    aria-expanded="false"
+                    aria-controls="menu-sidebar">
+              Filters
+            </button>
+
+            <div class="search-bar menu-search-bar {% if search_query %}has-value{% endif %}" style="flex:1;max-width:420px;">
+              <i class="search-icon bi bi-search" aria-hidden="true"></i>
+              <input type="text"
+                     class="search-input"
+                     name="query"
+                     id="search-query-input"
+                     value="{{ search_query }}"
+                     placeholder="Search menu items..."
+                     aria-label="Search menu items"
+                     autocomplete="off">
+              {% if search_query %}
+                <button type="button" class="search-clear bi bi-x-circle-fill" id="search-clear" aria-label="Clear search"></button>
+              {% endif %}
+              <div class="search-suggestions"></div>
+            </div>
+
+            <select class="filter-select form-select" name="sort" id="sort-select" aria-label="Sort menu items" style="width:auto;min-width:160px;">
+              <option value="">Sort by</option>
+              <option value="price-asc" {% if selected_sort == 'price-asc' %}selected{% endif %}>Price: Low to High</option>
+              <option value="price-desc" {% if selected_sort == 'price-desc' %}selected{% endif %}>Price: High to Low</option>
+              <option value="name" {% if selected_sort == 'name' %}selected{% endif %}>Name: A to Z</option>
+            </select>
+          </div>
+        </form>
+
+        <div class="search-header">
+          {% if search_query %}
+            <p class="search-query">
+              Search results for "<span>{{ search_query }}</span>"
+            </p>
+          {% endif %}
+          <p class="search-count">
+            {{ foods.paginator.count|default:foods|length }} item{{ foods.paginator.count|default:foods|length|pluralize }} found
+          </p>
+        </div>
+
+        {% if has_active_filters %}
+          <div class="active-filters-bar">
+            <span class="filters-label">Active filters</span>
+            {% if selected_category %}
+              <a href="{% url 'menu:list' %}?{% if search_query %}query={{ search_query|urlencode }}&{% endif %}{% if price_min %}price_min={{ price_min }}&{% endif %}{% if price_max %}price_max={{ price_max }}&{% endif %}{% if not available_only %}available_only=0&{% endif %}{% if selected_sort %}sort={{ selected_sort }}{% endif %}"
+                 class="filter-chip-tag">
+                {{ selected_category_name }} <i class="bi bi-x"></i>
+              </a>
+            {% endif %}
+            {% if search_query %}
+              <a href="{% url 'menu:list' %}?{% if selected_category %}category={{ selected_category }}&{% endif %}{% if price_min %}price_min={{ price_min }}&{% endif %}{% if price_max %}price_max={{ price_max }}&{% endif %}{% if not available_only %}available_only=0&{% endif %}{% if selected_sort %}sort={{ selected_sort }}{% endif %}"
+                 class="filter-chip-tag">
+                "{{ search_query|truncatechars:20 }}" <i class="bi bi-x"></i>
+              </a>
+            {% endif %}
+            {% if price_min or price_max %}
+              <span class="filter-chip-tag">{{ currency_symbol }}{{ price_min|default:'0' }} – {{ currency_symbol }}{{ price_max|default:'500' }}</span>
+            {% endif %}
+            {% if not available_only %}
+              <span class="filter-chip-tag">Including unavailable</span>
+            {% endif %}
+            <a href="{% url 'menu:list' %}" class="clear-filters-link">Clear all</a>
+          </div>
+        {% endif %}
+
+        <div class="food-grid">
+          {% for food in foods %}
+            <article class="food-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:1 }}0">
+              <div class="food-card-image">
+                <a href="{% url 'menu:detail' food.id %}" tabindex="-1" aria-hidden="true">
+                  {% if food.image %}
+                    <img src="{{ food.image.url }}" alt="{{ food.name }}" loading="lazy">
+                  {% else %}
+                    <img src="{% static 'public/img/food-placeholder.jpg' %}" alt="{{ food.name }}" loading="lazy">
+                  {% endif %}
+                </a>
+
+                <div class="card-overlay">
+                  <a href="{% url 'menu:detail' food.id %}" class="btn-yummy-outline btn-yummy-sm">View Details</a>
+                </div>
+
+                {% if food.featured %}
+                  <span class="featured-badge"><i class="bi bi-star-fill"></i> Featured</span>
+                {% endif %}
+
+                {% if food.category and not food.featured %}
+                  <span class="category-chip">{{ food.category.name }}</span>
+                {% elif food.category %}
+                  <span class="category-chip" style="top:44px;">{{ food.category.name }}</span>
+                {% endif %}
+
+                {% if food.is_available %}
+                  <span class="availability-badge in-stock"><i class="bi bi-check-circle-fill"></i> Available</span>
+                {% else %}
+                  <span class="availability-badge out-of-stock"><i class="bi bi-x-circle-fill"></i> Unavailable</span>
+                {% endif %}
+              </div>
+
+              <div class="food-card-body">
+                <h3 class="food-card-title">
+                  <a href="{% url 'menu:detail' food.id %}">{{ food.name }}</a>
+                </h3>
+                <p class="food-card-description">{{ food.description|truncatewords:15 }}</p>
+                <div class="food-card-footer">
+                  <span class="food-card-price">{{ currency_symbol }}{{ food.price }}</span>
+                  <a href="{% url 'menu:detail' food.id %}" class="btn-yummy-text btn-yummy-sm" style="font-size:13px;">
+                    Details <i class="bi bi-arrow-right"></i>
+                  </a>
+                </div>
+                {% if user.is_authenticated and user.is_staff %}
+                  <div class="admin-card-actions mt-2 pt-2 border-top d-flex gap-2">
+                    <a href="{% url 'dashboard:foods_edit' food.id %}" class="btn btn-warning btn-sm" style="flex:1;font-size:12px;padding:4px 8px;"><i class="bi bi-pencil-square"></i> Edit</a>
+                    <form method="post" action="{% url 'dashboard:foods_delete' food.id %}" style="flex:1;display:inline;" onsubmit="return confirm('Delete {{ food.name }}?');">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-danger btn-sm w-100" style="font-size:12px;padding:4px 8px;"><i class="bi bi-trash"></i> Delete</button>
+                    </form>
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="food-card-actions">
+                {% if food.is_available %}
+                  <form method="post" action="{% url 'orders:cart' %}" class="food-card-actions-row">
+                    {% csrf_token %}
+                    <input type="hidden" name="food_id" value="{{ food.id }}">
+                    <input type="hidden" name="action" value="add">
+                    <div class="quantity-stepper" aria-label="Quantity for {{ food.name }}">
+                      <button type="button" class="qty-btn" onclick="stepQty(this,-1)" aria-label="Decrease"><i class="bi bi-dash"></i></button>
+                      <input type="number" name="quantity" value="1" min="1" max="99" class="qty-input" aria-label="Quantity">
+                      <button type="button" class="qty-btn" onclick="stepQty(this,1)" aria-label="Increase"><i class="bi bi-plus"></i></button>
+                    </div>
+                    <button type="submit" class="btn-yummy btn-yummy-sm" style="flex:1;justify-content:center;">
+                      <i class="bi bi-cart-plus"></i> Add
+                    </button>
+                    <a href="{% url 'menu:detail' food.id %}" class="btn-yummy-outline btn-yummy-sm btn-view-details" aria-label="View {{ food.name }} details">
+                      <i class="bi bi-eye"></i>
+                    </a>
+                  </form>
+                {% else %}
+                  <a href="{% url 'menu:detail' food.id %}" class="btn-yummy-outline btn-yummy-sm" style="width:100%;justify-content:center;">
+                    View Item
+                  </a>
+                {% endif %}
+              </div>
+            </article>
+          {% empty %}
+            <div style="grid-column:1/-1;">
+              <div class="empty-state">
+                <i class="bi bi-search empty-icon"></i>
+                <h4>No menu items found</h4>
+                <p>Try adjusting your filters or search for something else.</p>
+                <a href="{% url 'menu:list' %}" class="btn-yummy">Browse All Items</a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+          {% include 'components/pagination.html' %}
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const menuSidebar = document.getElementById('menu-sidebar');
+  const menuOverlay = document.getElementById('menu-sidebar-overlay');
+  const menuToggleBtn = document.getElementById('menu-filter-toggle');
+  const menuCloseBtn = document.getElementById('menu-sidebar-close');
+  const searchForm = document.getElementById('search-form');
+  const searchInput = document.getElementById('search-query-input');
+  const sortSelect = document.getElementById('sort-select');
+
+  function openSidebar() {
+    menuSidebar.classList.add('open');
+    menuOverlay.classList.add('active');
+    menuToggleBtn?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSidebar() {
+    menuSidebar.classList.remove('open');
+    menuOverlay.classList.remove('active');
+    menuToggleBtn?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  menuToggleBtn?.addEventListener('click', openSidebar);
+  menuCloseBtn?.addEventListener('click', closeSidebar);
+  menuOverlay?.addEventListener('click', closeSidebar);
+
+  sortSelect?.addEventListener('change', () => searchForm.submit());
+
+  searchInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      searchForm.submit();
+    }
+  });
+
+  document.getElementById('search-clear')?.addEventListener('click', () => {
+    searchInput.value = '';
+    searchForm.submit();
+  });
+
+  function stepQty(btn, delta) {
+    const input = btn.closest('.quantity-stepper')?.querySelector('.qty-input');
+    if (!input) return;
+    input.value = Math.max(1, Math.min(99, parseInt(input.value, 10) + delta));
+  }
+</script>
+{% endblock %}

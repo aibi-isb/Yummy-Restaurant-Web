@@ -1,0 +1,324 @@
+{% extends 'base/admin_base.html' %}
+{% load static %}
+
+{% block admin_extra_head %}
+<style>
+  .food-form-page {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .food-form-page .panel {
+    margin-bottom: 1.5rem;
+  }
+  .food-form-page .panel-header {
+    border-bottom: 1px solid var(--admin-border);
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .food-form-page .panel-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  .food-form-page .panel-header h2 i {
+    width: 34px;
+    height: 34px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 8px;
+    background: #eaf2ff;
+    color: var(--admin-primary-dark);
+    font-size: 0.95rem;
+  }
+  .food-form-page .form-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--admin-muted);
+    margin-bottom: 0.35rem;
+  }
+  .food-form-page .form-text {
+    font-size: 0.82rem;
+    color: var(--admin-muted);
+  }
+  .image-upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.75rem 1rem;
+    border: 2px dashed var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-surface-soft);
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    min-height: 180px;
+    position: relative;
+    overflow: hidden;
+  }
+  .image-upload-area:hover {
+    border-color: var(--admin-primary);
+    background: #eaf2ff;
+  }
+  .image-upload-area.has-image {
+    border-style: solid;
+    padding: 0.5rem;
+  }
+  .image-upload-area .upload-icon {
+    font-size: 2.5rem;
+    color: var(--admin-border);
+  }
+  .image-upload-area .upload-text {
+    color: var(--admin-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .image-upload-area .upload-hint {
+    color: var(--admin-muted);
+    font-size: 0.78rem;
+  }
+  .image-upload-area img {
+    max-height: 160px;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 6px;
+  }
+  .image-upload-area input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .toggle-field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1rem;
+    background: var(--admin-surface-soft);
+    border-radius: 8px;
+    border: 1px solid var(--admin-border);
+    transition: border-color 0.15s ease;
+  }
+  .toggle-field:hover {
+    border-color: #c6d5e8;
+  }
+  .toggle-field .toggle-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .toggle-field .toggle-label span:first-child {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--admin-text);
+  }
+  .toggle-field .toggle-label span:last-child {
+    font-size: 0.78rem;
+    color: var(--admin-muted);
+  }
+  .toggle-field .form-check-input {
+    width: 42px;
+    height: 22px;
+    margin: 0;
+    cursor: pointer;
+  }
+  .toggle-field .form-check-input:checked {
+    background-color: var(--admin-primary);
+    border-color: var(--admin-primary);
+  }
+  .food-form-sticky-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(14px);
+    border-top: 1px solid var(--admin-border);
+    padding: 1rem 0;
+    margin-top: 2rem;
+    margin-bottom: -1.75rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .food-form-sticky-footer .btn {
+    min-height: 44px;
+    min-width: 140px;
+  }
+  @media (max-width: 575.98px) {
+    .image-upload-area {
+      min-height: 140px;
+      padding: 1rem;
+    }
+    .food-form-sticky-footer .btn {
+      width: 100%;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+  <div class="page-heading-copy">
+    <span class="page-icon"><i class="bi bi-pencil-square"></i></span>
+    <div>
+      <p class="eyebrow mb-1">Food Management</p>
+      <h1 class="h3 mb-1">Edit Food</h1>
+      <p class="text-muted mb-0">Update menu item details.</p>
+    </div>
+  </div>
+</div>
+
+<form method="post" enctype="multipart/form-data" class="food-form-page">
+  {% csrf_token %}
+
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3 mb-4" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      <span>{{ form.non_field_errors.0 }}</span>
+    </div>
+  {% endif %}
+
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <section class="panel">
+        <div class="panel-header">
+          <h2 class="mb-0"><i class="bi bi-info-circle"></i> Basic Information</h2>
+        </div>
+        <div class="panel-body">
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label for="{{ form.name.id_for_label }}" class="form-label">Food Name</label>
+              {{ form.name }}
+              {% if form.name.errors %}<div class="text-danger small mt-1">{{ form.name.errors }}</div>{% endif %}
+            </div>
+            <div class="col-md-4">
+              <label for="{{ form.category.id_for_label }}" class="form-label">Category</label>
+              {{ form.category }}
+              {% if form.category.errors %}<div class="text-danger small mt-1">{{ form.category.errors }}</div>{% endif %}
+            </div>
+          </div>
+          <div class="row g-3 mt-2">
+            <div class="col-md-4">
+              <label for="{{ form.price.id_for_label }}" class="form-label">Price ({{ currency_symbol }})</label>
+              <div class="input-group">
+                <span class="input-group-text">{{ currency_symbol }}</span>
+                {{ form.price }}
+              </div>
+              {% if form.price.errors %}<div class="text-danger small mt-1">{{ form.price.errors }}</div>{% endif %}
+            </div>
+          </div>
+          <div class="row g-3 mt-2">
+            <div class="col-12">
+              <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+              {{ form.description }}
+              {% if form.description.errors %}<div class="text-danger small mt-1">{{ form.description.errors }}</div>{% endif %}
+              <div class="form-text mt-1">Describe ingredients, taste, and what makes this dish special.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2 class="mb-0"><i class="bi bi-toggle-on"></i> Visibility &amp; Promotion</h2>
+        </div>
+        <div class="panel-body">
+          <div class="d-flex flex-column gap-3">
+            <div class="toggle-field">
+              <div class="toggle-label">
+                <span>Available</span>
+                <span>Customers can see and order this item.</span>
+              </div>
+              {{ form.is_available }}
+            </div>
+            <div class="toggle-field">
+              <div class="toggle-label">
+                <span>Featured</span>
+                <span>Show this item prominently on the menu.</span>
+              </div>
+              {{ form.featured }}
+            </div>
+          </div>
+          {% if form.is_available.errors %}<div class="text-danger small mt-1">{{ form.is_available.errors }}</div>{% endif %}
+          {% if form.featured.errors %}<div class="text-danger small mt-1">{{ form.featured.errors }}</div>{% endif %}
+        </div>
+      </section>
+    </div>
+
+    <div class="col-lg-4">
+      <section class="panel">
+        <div class="panel-header">
+          <h2 class="mb-0"><i class="bi bi-image"></i> Photo</h2>
+        </div>
+        <div class="panel-body">
+          <div class="image-upload-area" id="imageUploadArea">
+            <div id="imagePlaceholder">
+              <div class="upload-icon"><i class="bi bi-cloud-arrow-up"></i></div>
+              <div class="upload-text">Upload Photo</div>
+              <div class="upload-hint">Click or drag &amp; drop<br>PNG, JPG up to 5MB</div>
+            </div>
+            <img id="imagePreview" style="display:none;" alt="Food preview">
+            {{ form.image }}
+          </div>
+          {% if form.image.errors %}<div class="text-danger small mt-1">{{ form.image.errors }}</div>{% endif %}
+          <div class="form-text mt-2">Recommended: 800&times;600px or square aspect ratio.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="food-form-sticky-footer">
+    <div class="d-flex gap-2 justify-content-end">
+      <a href="{% url 'dashboard:foods' %}" class="btn btn-light">
+        <i class="bi bi-x-lg"></i> Cancel
+      </a>
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check-lg"></i> Update Food
+      </button>
+    </div>
+  </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const fileInput = document.querySelector('#{{ form.image.id_for_label }}');
+    const uploadArea = document.getElementById('imageUploadArea');
+    const preview = document.getElementById('imagePreview');
+    const placeholder = document.getElementById('imagePlaceholder');
+
+    if (fileInput) {
+      fileInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+          preview.src = ev.target.result;
+          preview.style.display = 'block';
+          placeholder.style.display = 'none';
+          uploadArea.classList.add('has-image');
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    {% if form.instance.image %}
+    (function () {
+      const url = '{{ form.instance.image.url }}';
+      if (url) {
+        preview.src = url;
+        preview.style.display = 'block';
+        placeholder.style.display = 'none';
+        uploadArea.classList.add('has-image');
+      }
+    })();
+    {% endif %}
+  });
+</script>
+{% endblock %}

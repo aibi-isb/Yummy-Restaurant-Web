@@ -1,0 +1,90 @@
+{% extends 'base/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page-heading">
+  <div class="page-heading-copy">
+    <span class="page-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
+    <div>
+      <p class="eyebrow mb-1">Admin Panel</p>
+      <h1 class="h3 mb-1">Dashboard</h1>
+      <p class="text-muted mb-0">Overview of your restaurant operations.</p>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-sm-6 col-xl-3">
+    <div class="metric-card">
+      <div class="metric-icon" style="background: rgba(37, 99, 235, 0.1);"><i class="bi bi-egg-fried" style="color: #2563eb;"></i></div>
+      <div class="metric-body"><h3 class="metric-value">{{ total_foods }}</h3><p class="metric-label">Food Items</p></div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="metric-card">
+      <div class="metric-icon" style="background: rgba(15, 118, 110, 0.1);"><i class="bi bi-people" style="color: #0f766e;"></i></div>
+      <div class="metric-body"><h3 class="metric-value">{{ total_customers }}</h3><p class="metric-label">Customers</p></div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="metric-card">
+      <div class="metric-icon" style="background: rgba(217, 119, 6, 0.1);"><i class="bi bi-receipt" style="color: #d97706;"></i></div>
+      <div class="metric-body"><h3 class="metric-value">{{ total_orders }}</h3><p class="metric-label">Orders</p></div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="metric-card">
+      <div class="metric-icon" style="background: rgba(220, 38, 38, 0.1);"><i class="bi bi-credit-card" style="color: #dc2626;"></i></div>
+      <div class="metric-body"><h3 class="metric-value">{{ pending_payments }}</h3><p class="metric-label">Pending Payments</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <section class="panel">
+      <div class="panel-header"><h2 class="h5 mb-0 section-title"><i class="bi bi-receipt"></i><span>Recent Orders</span></h2></div>
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead><tr><th>Order #</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody>
+            {% for order in recent_orders %}
+              <tr>
+                <td>{{ order.order_number }}</td>
+                <td>{{ order.customer.full_name }}</td>
+                <td>{{ currency_symbol }}{{ order.total_amount }}</td>
+                <td><span class="badge text-bg-{% if order.status == 'pending' %}warning{% elif order.status == 'delivered' %}success{% else %}info{% endif %}">{{ order.get_status_display }}</span></td>
+                <td>{{ order.created_at|date:"M d, Y" }}</td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="5" class="text-center text-muted">No orders yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+  <div class="col-lg-5">
+    <section class="panel">
+      <div class="panel-header"><h2 class="h5 mb-0 section-title"><i class="bi bi-credit-card"></i><span>Pending Payments</span></h2></div>
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead><tr><th>Order</th><th>Amount</th><th>Method</th><th>Date</th></tr></thead>
+          <tbody>
+            {% for payment in recent_payments %}
+              <tr>
+                <td>{{ payment.order.order_number }}</td>
+                <td>{{ currency_symbol }}{{ payment.amount }}</td>
+                <td>{{ payment.get_method_display }}</td>
+                <td>{{ payment.created_at|date:"M d, Y" }}</td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="4" class="text-center text-muted">No pending payments.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+/* ----------------------------------------
+   Component: Confirmation Dialog - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.confirmation-dialog {
+  text-align: center;
+  padding: 20px;
+}
+
+.confirmation-dialog .confirm-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.confirmation-dialog .confirm-icon.warning {
+  color: #ffc107;
+}
+
+.confirmation-dialog .confirm-icon.info {
+  color: var(--accent-color);
+}
+
+.confirmation-dialog .confirm-icon.error {
+  color: #df1529;
+}
+
+.confirmation-dialog h4 {
+  font-size: 18px;
+  font-weight: 600;
+  font-family: var(--default-font);
+  margin-bottom: 8px;
+}
+
+.confirmation-dialog p {
+  font-size: 14px;
+  color: color-mix(in srgb, var(--default-color), transparent 30%);
+  margin-bottom: 24px;
+}
+
+.confirmation-dialog .confirm-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}

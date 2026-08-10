@@ -1,0 +1,101 @@
+/* ----------------------------------------
+   Payment Feature Styles
+---------------------------------------- */
+.payment-page-layout {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.payment-processing {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.payment-processing .processing-spinner {
+  width: 56px;
+  height: 56px;
+  border: 4px solid color-mix(in srgb, var(--accent-color), transparent 80%);
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: payment-spin 0.8s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes payment-spin {
+  to { transform: rotate(360deg); }
+}
+
+.payment-processing .processing-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--heading-color);
+  margin-bottom: 8px;
+}
+
+.payment-processing .processing-subtitle {
+  font-size: 14px;
+  color: color-mix(in srgb, var(--default-color), transparent 30%);
+}
+
+.payment-success {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.payment-success .success-icon {
+  font-size: 64px;
+  color: #059652;
+  margin-bottom: 16px;
+}
+
+.payment-success .success-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--heading-color);
+  margin-bottom: 8px;
+}
+
+.payment-success .success-subtitle {
+  font-size: 14px;
+  color: color-mix(in srgb, var(--default-color), transparent 30%);
+  margin-bottom: 24px;
+}
+
+/* Card preview */
+.card-preview {
+  background: linear-gradient(135deg, #1f1f24, #37373f);
+  border-radius: 12px;
+  padding: 24px;
+  color: #ffffff;
+  margin-bottom: 24px;
+  min-height: 180px;
+  position: relative;
+}
+
+.card-preview .card-type {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.7;
+  margin-bottom: 24px;
+}
+
+.card-preview .card-number-display {
+  font-size: 20px;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  font-family: monospace;
+}
+
+.card-preview .card-details {
+  display: flex;
+  gap: 24px;
+  font-size: 12px;
+}
+
+.card-preview .card-details .detail-label {
+  opacity: 0.7;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}

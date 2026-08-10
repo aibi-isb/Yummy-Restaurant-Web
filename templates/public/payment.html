@@ -1,0 +1,305 @@
+{% extends 'base/customer_base.html' %}
+{% load static %}
+
+{% block title %}Payment - Yummy Restaurant{% endblock %}
+
+{% block body_class %}payment-page{% endblock %}
+
+{% block customer_extra_head %}
+  <link href="{% static 'public/css/features/payment/payment.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Payment</h2>
+  <p>Complete your payment to place the order.</p>
+</div>
+
+<div class="payment-page-layout">
+  <div class="payment-form-container">
+    <div class="payment-form">
+      <h4 style="font-size:16px;font-weight:600;font-family:var(--default-font);margin-bottom:20px;">Payment Method</h4>
+
+      <div class="payment-methods">
+        <div class="payment-method-option active" data-method="card" id="method-card">
+          <i class="bi bi-credit-card"></i>
+          <span>Credit Card</span>
+        </div>
+        <div class="payment-method-option" data-method="mobile_money" id="method-mobile">
+          <i class="bi bi-phone"></i>
+          <span>Mobile Money</span>
+        </div>
+      </div>
+
+      <form method="post" id="payment-form">
+        {% csrf_token %}
+        <input type="hidden" name="payment_method" id="payment-method-input" value="card">
+
+        <div id="credit-card-form" class="payment-detail-form">
+          <div class="card-preview" id="card-preview">
+            <div class="card-type">Credit Card</div>
+            <div class="card-number-display" id="card-number-display">•••• •••• •••• ••••</div>
+            <div class="card-details">
+              <div>
+                <div class="detail-label">Card Holder</div>
+                <div id="card-holder-display">Full Name</div>
+              </div>
+              <div>
+                <div class="detail-label">Expires</div>
+                <div id="card-expiry-display">MM/YY</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="{{ card_form.card_holder.id_for_label }}">Card Holder Name</label>
+            <input type="text" class="form-input" id="{{ card_form.card_holder.id_for_label }}" name="{{ card_form.card_holder.html_name }}" placeholder="John Doe" value="{{ card_form.card_holder.value|default:'' }}">
+            {% if card_form.card_holder.errors %}<div class="form-error visible">{{ card_form.card_holder.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="{{ card_form.card_number.id_for_label }}">Card Number</label>
+            <input type="text" class="form-input{% if card_form.card_number.errors %} error{% endif %}" id="{{ card_form.card_number.id_for_label }}" name="{{ card_form.card_number.html_name }}" placeholder="4242 4242 4242 4242" maxlength="19" pattern="[0-9]{4} ?[0-9]{4} ?[0-9]{4} ?[0-9]{4}" title="Enter a 16-digit card number." value="{{ card_form.card_number.value|default:'' }}">
+            <div id="card-number-error" class="form-error{% if card_form.card_number.errors %} visible{% endif %}">{% if card_form.card_number.errors %}{{ card_form.card_number.errors.0 }}{% endif %}</div>
+          </div>
+          <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-group">
+              <label class="form-label" for="{{ card_form.expiry.id_for_label }}">Expiry Date</label>
+              <input type="text" class="form-input{% if card_form.expiry.errors %} error{% endif %}" id="{{ card_form.expiry.id_for_label }}" name="{{ card_form.expiry.html_name }}" placeholder="MM/YY" maxlength="5" pattern="(0[1-9]|1[0-2])/[0-9]{2}" title="Enter the expiry date in MM/YY format." value="{{ card_form.expiry.value|default:'' }}">
+              <div id="expiry-error" class="form-error{% if card_form.expiry.errors %} visible{% endif %}">{% if card_form.expiry.errors %}{{ card_form.expiry.errors.0 }}{% endif %}</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ card_form.cvv.id_for_label }}">CVV</label>
+              <input type="password" class="form-input{% if card_form.cvv.errors %} error{% endif %}" id="{{ card_form.cvv.id_for_label }}" name="{{ card_form.cvv.html_name }}" placeholder="123" maxlength="4" inputmode="numeric" pattern="[0-9]{3,4}" title="Enter a 3 or 4-digit CVV." autocomplete="cc-csc">
+              <div id="cvv-error" class="form-error{% if card_form.cvv.errors %} visible{% endif %}">{% if card_form.cvv.errors %}{{ card_form.cvv.errors.0 }}{% endif %}</div>
+            </div>
+          </div>
+          <input type="hidden" name="amount" value="{{ order.total_amount }}">
+        </div>
+
+        <div id="mobile-money-form" class="payment-detail-form" style="display:none;">
+          <div class="form-group">
+            <label class="form-label" for="{{ mobile_form.mobile_number.id_for_label }}">Mobile Number</label>
+            <input type="tel" class="form-input{% if mobile_form.mobile_number.errors %} error{% endif %}" id="{{ mobile_form.mobile_number.id_for_label }}" name="{{ mobile_form.mobile_number.html_name }}" placeholder="+232 76 123 456" maxlength="20" inputmode="tel" autocomplete="tel" pattern="(?:\+232 ?[0-9]{2} ?[0-9]{3} ?[0-9]{3}|[1-9][0-9] ?[0-9]{3} ?[0-9]{3}|0[0-9]{2} ?[0-9]{3} ?[0-9]{3})" title="Enter a valid international or local mobile number." value="{{ mobile_form.mobile_number.value|default:'' }}">
+            <div id="mobile-number-error" class="form-error{% if mobile_form.mobile_number.errors %} visible{% endif %}">{% if mobile_form.mobile_number.errors %}{{ mobile_form.mobile_number.errors.0 }}{% endif %}</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="{{ mobile_form.network.id_for_label }}">Network</label>
+            <select class="form-select" id="{{ mobile_form.network.id_for_label }}" name="{{ mobile_form.network.html_name }}">
+              {% for value, label in mobile_form.network.field.choices %}
+                <option value="{{ value }}" {% if mobile_form.network.value == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Amount</label>
+            <input type="text" class="form-input" value="{{ currency_symbol }}{{ order.total_amount }}" readonly style="font-weight:600;color:var(--accent-color);">
+          </div>
+          <input type="hidden" name="amount" value="{{ order.total_amount }}">
+        </div>
+
+        <div style="margin-top:20px;">
+          <button type="submit" class="btn-yummy btn-yummy-block btn-yummy-lg" id="pay-now-btn">
+            Pay {{ currency_symbol }}{{ order.total_amount }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const methodInput = document.getElementById('payment-method-input');
+  const cardForm = document.getElementById('credit-card-form');
+  const mobileForm = document.getElementById('mobile-money-form');
+  const paymentForm = document.getElementById('payment-form');
+
+  document.querySelectorAll('.payment-method-option').forEach(function (opt) {
+    opt.addEventListener('click', function () {
+      document.querySelectorAll('.payment-method-option').forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+      const method = opt.dataset.method;
+      methodInput.value = method;
+      cardForm.style.display = method === 'card' ? 'block' : 'none';
+      mobileForm.style.display = method === 'mobile_money' ? 'block' : 'none';
+      cardForm.querySelectorAll('input, select').forEach(el => el.disabled = method !== 'card');
+      mobileForm.querySelectorAll('input, select').forEach(el => el.disabled = method !== 'mobile_money');
+    });
+  });
+
+  cardForm.querySelectorAll('input, select').forEach(el => el.disabled = false);
+  mobileForm.querySelectorAll('input, select').forEach(el => el.disabled = true);
+
+  const cardNum = document.getElementById('{{ card_form.card_number.id_for_label }}');
+  const cardHolder = document.getElementById('{{ card_form.card_holder.id_for_label }}');
+  const cardExpiry = document.getElementById('{{ card_form.expiry.id_for_label }}');
+  const cardCvv = document.getElementById('{{ card_form.cvv.id_for_label }}');
+  const cardNumberError = document.getElementById('card-number-error');
+  const expiryError = document.getElementById('expiry-error');
+  const cvvError = document.getElementById('cvv-error');
+  const mobileNumber = document.getElementById('{{ mobile_form.mobile_number.id_for_label }}');
+  const mobileNumberError = document.getElementById('mobile-number-error');
+
+  function setFieldError(input, errorElement, message) {
+    input.classList.toggle('error', Boolean(message));
+    errorElement.textContent = message;
+    errorElement.classList.toggle('visible', Boolean(message));
+    input.setCustomValidity(message);
+    return !message;
+  }
+
+  function rejectInvalidInput(input, errorElement, allowedCharacters, message) {
+    input.addEventListener('beforeinput', function (event) {
+      if (!event.data || !event.inputType || !event.inputType.startsWith('insert')) return;
+      if (!allowedCharacters.test(event.data)) {
+        event.preventDefault();
+        setFieldError(this, errorElement, message);
+      }
+    });
+  }
+
+  function validateCardNumber() {
+    const digits = cardNum.value.replace(/\s/g, '');
+    return setFieldError(cardNum, cardNumberError,
+      /^[0-9]{16}$/.test(digits) ? '' : 'Card number must contain 16 digits.');
+  }
+
+  function validateExpiry() {
+    return setFieldError(cardExpiry, expiryError,
+      /^(0[1-9]|1[0-2])\/[0-9]{2}$/.test(cardExpiry.value) ? '' : 'Expiry date must be in MM/YY format.');
+  }
+
+  function validateCvv() {
+    return setFieldError(cardCvv, cvvError,
+      /^[0-9]{3,4}$/.test(cardCvv.value) ? '' : 'CVV must contain 3 or 4 digits.');
+  }
+
+  function validateMobileNumber() {
+    const compactNumber = mobileNumber.value.replace(/\s/g, '');
+    const isInternational = /^\+232[0-9]{8}$/.test(compactNumber);
+    const isLocal = /^[1-9][0-9]{7}$/.test(compactNumber) || /^0[0-9]{8}$/.test(compactNumber);
+    return setFieldError(mobileNumber, mobileNumberError,
+      isInternational || isLocal ? '' : 'Enter a valid mobile number in international or local format.');
+  }
+
+  if (cardNum) {
+    rejectInvalidInput(cardNum, cardNumberError, /^[0-9 ]+$/, 'Card number must contain 16 digits.');
+    cardNum.addEventListener('input', function () {
+      const rawValue = this.value;
+      const hasInvalidCharacters = /[^0-9 ]/.test(rawValue);
+      let val = rawValue.replace(/\D/g, '').substring(0, 16);
+      val = val.replace(/(.{4})/g, '$1 ').trim();
+      this.value = val;
+      document.getElementById('card-number-display').textContent = val || '•••• •••• •••• ••••';
+      if (hasInvalidCharacters) {
+        setFieldError(this, cardNumberError, 'Card number must contain 16 digits.');
+      } else {
+        validateCardNumber();
+      }
+    });
+    cardNum.addEventListener('blur', function () {
+      validateCardNumber();
+    });
+  }
+  if (cardHolder) {
+    cardHolder.addEventListener('input', function () {
+      document.getElementById('card-holder-display').textContent = this.value || 'Full Name';
+    });
+  }
+  if (cardExpiry) {
+    rejectInvalidInput(cardExpiry, expiryError, /^[0-9/]+$/, 'Expiry date must be in MM/YY format.');
+    cardExpiry.addEventListener('input', function () {
+      const rawValue = this.value;
+      const hasInvalidCharacters = /[^0-9/]/.test(rawValue);
+      let val = rawValue.replace(/\D/g, '').substring(0, 4);
+      if (val.length > 2) val = val.substring(0, 2) + '/' + val.substring(2);
+      this.value = val;
+      document.getElementById('card-expiry-display').textContent = val || 'MM/YY';
+      if (hasInvalidCharacters) {
+        setFieldError(this, expiryError, 'Expiry date must be in MM/YY format.');
+      } else {
+        validateExpiry();
+      }
+    });
+    cardExpiry.addEventListener('blur', function () {
+      validateExpiry();
+    });
+  }
+  if (cardCvv) {
+    rejectInvalidInput(cardCvv, cvvError, /^[0-9]+$/, 'CVV must contain 3 or 4 digits.');
+    cardCvv.addEventListener('input', function () {
+      const rawValue = this.value;
+      const hasInvalidCharacters = /[^0-9]/.test(rawValue);
+      this.value = rawValue.replace(/\D/g, '').substring(0, 4);
+      if (hasInvalidCharacters) {
+        setFieldError(this, cvvError, 'CVV must contain 3 or 4 digits.');
+      } else {
+        validateCvv();
+      }
+    });
+    cardCvv.addEventListener('blur', function () {
+      validateCvv();
+    });
+  }
+
+  if (mobileNumber) {
+    rejectInvalidInput(mobileNumber, mobileNumberError, /^[0-9+ ]+$/, 'Enter a valid mobile number in international or local format.');
+    mobileNumber.addEventListener('input', function () {
+      const rawValue = this.value;
+      const compactRawValue = rawValue.replace(/\s/g, '');
+      const hasInvalidCharacters = /[^0-9+ ]/.test(rawValue)
+        || (compactRawValue.includes('+') && !compactRawValue.startsWith('+232'))
+        || (compactRawValue.startsWith('+232') && compactRawValue.slice(4).includes('+'))
+        || (!compactRawValue.startsWith('+') && compactRawValue.includes('+'));
+      let compactNumber = rawValue.replace(/[^0-9+]/g, '');
+
+      if (compactNumber.includes('+')) {
+        compactNumber = '+' + compactNumber.replace(/\+/g, '');
+      }
+
+      if (compactNumber.startsWith('+') && !compactNumber.startsWith('+232')) {
+        this.value = compactNumber.substring(0, 12);
+      } else if (compactNumber.startsWith('+232')) {
+        const subscriberNumber = compactNumber.slice(4).substring(0, 8);
+        const groups = [subscriberNumber.substring(0, 2), subscriberNumber.substring(2, 5), subscriberNumber.substring(5, 8)].filter(Boolean);
+        this.value = ['+232', ...groups].join(' ');
+      } else {
+        const localNumber = compactNumber.replace(/\+/g, '').substring(0, 9);
+        const groupSizes = localNumber.startsWith('0') ? [3, 3, 3] : [2, 3, 3];
+        const groups = [];
+        let offset = 0;
+        groupSizes.forEach(size => {
+          if (offset < localNumber.length) {
+            groups.push(localNumber.substring(offset, offset + size));
+            offset += size;
+          }
+        });
+        this.value = groups.join(' ');
+      }
+
+      if (hasInvalidCharacters) {
+        setFieldError(this, mobileNumberError, 'Enter a valid mobile number in international or local format.');
+      } else {
+        validateMobileNumber();
+      }
+    });
+    mobileNumber.addEventListener('blur', function () {
+      validateMobileNumber();
+    });
+  }
+
+  paymentForm.addEventListener('submit', function (event) {
+    if (methodInput.value === 'card') {
+      const cardNumberValid = validateCardNumber();
+      const expiryValid = validateExpiry();
+      const cvvValid = validateCvv();
+      if (!cardNumberValid || !expiryValid || !cvvValid) {
+        event.preventDefault();
+      }
+    } else if (methodInput.value === 'mobile_money' && !validateMobileNumber()) {
+      event.preventDefault();
+    }
+  });
+</script>
+{% endblock %}

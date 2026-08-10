@@ -1,0 +1,35 @@
+/* ----------------------------------------
+   Feature: Edit Profile - YUMMI Restaurant
+---------------------------------------- */
+
+.edit-profile-page .edit-profile-card {
+  max-width: 560px;
+  background-color: var(--surface-color);
+  border-radius: 5px;
+  padding: 32px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+.edit-profile-page .edit-profile-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  font-family: var(--heading-font);
+  color: var(--heading-color);
+  margin-bottom: 24px;
+}
+
+.edit-profile-page .edit-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.edit-profile-page .edit-actions .btn-yummy {
+  flex: 1;
+  justify-content: center;
+}
+
+.edit-profile-page .edit-actions .btn-yummy-outline {
+  flex: 1;
+  justify-content: center;
+}

@@ -1,0 +1,307 @@
+{% extends 'base/dashboard_base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Yummy Restaurant{% endblock %}
+
+{% block body_class %}dashboard-standalone-page dashboard-page{% endblock %}
+
+{% block dashboard_extra_head %}
+  <link href="{% static 'public/css/features/dashboard-redesign.css' %}" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+{% with unread_count=recent_notifications|length %}
+<div class="dashboard-top-bar">
+  <div class="greeting">
+    <h2>Dashboard</h2>
+    <p>Welcome back, {{ customer.full_name|default:user.username }}!</p>
+  </div>
+  <div class="dashboard-actions">
+    <a href="{% url 'notifications:list' %}" class="notif-bell">
+      <i class="bi bi-bell"></i>
+      {% if unread_count %}<span class="badge-dot"></span>{% endif %}
+    </a>
+  </div>
+</div>
+
+<div class="row g-3 mb-4" id="stat-cards">
+  <div class="col-md-6 col-lg-3">
+    <div class="statistics-card">
+      <div class="stat-icon" style="background:color-mix(in srgb,var(--accent-color),transparent 90%);color:var(--accent-color);">
+        <i class="bi bi-box"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ total_orders }}</div>
+        <div class="stat-label">Total Orders</div>
+        {% include 'components/trend_badge.html' with value=total_orders_trend %}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-3">
+    <div class="statistics-card">
+      <div class="stat-icon" style="background:color-mix(in srgb,#059652,transparent 90%);color:#059652;">
+        <i class="bi bi-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ delivered_count }}</div>
+        <div class="stat-label">Delivered</div>
+        {% include 'components/trend_badge.html' with value=delivered_trend %}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-3">
+    <div class="statistics-card">
+      <div class="stat-icon" style="background:color-mix(in srgb,#fd7e14,transparent 90%);color:#fd7e14;">
+        <i class="bi bi-hourglass"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ in_progress_count }}</div>
+        <div class="stat-label">In Progress</div>
+        {% include 'components/trend_badge.html' with value=in_progress_trend %}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-3">
+    <div class="statistics-card">
+      <div class="stat-icon" style="background:color-mix(in srgb,var(--accent-color),transparent 90%);color:var(--accent-color);">
+        <i class="bi bi-currency-exchange"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ currency_symbol }}{{ total_spent }}</div>
+        <div class="stat-label">Total Spent</div>
+        {% include 'components/trend_badge.html' with value=spent_trend %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-lg-6">
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">Orders</div>
+          <div class="chart-subtitle">Last 7 days</div>
+        </div>
+      </div>
+      <div class="chart-body">
+        <canvas id="ordersChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">Revenue</div>
+          <div class="chart-subtitle">Last 7 days</div>
+        </div>
+      </div>
+      <div class="chart-body">
+        <canvas id="revenueChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="orders-table-card">
+      <div class="table-header">
+        <h5>Recent Orders</h5>
+        <div class="table-tabs" id="orderTabs">
+          <button class="table-tab active" data-filter="all">All</button>
+          <button class="table-tab" data-filter="PENDING">Pending</button>
+          <button class="table-tab" data-filter="DELIVERED">Delivered</button>
+          <button class="table-tab" data-filter="CANCELLED">Cancelled</button>
+        </div>
+      </div>
+      <div class="table-responsive-custom">
+        <table class="orders-table" id="ordersTable">
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Date</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if recent_orders %}
+              {% for order in recent_orders %}
+              <tr data-status="{{ order.status }}">
+                <td class="cell-order">
+                  <a href="{% url 'orders:track' order.pk %}">{{ order.order_number }}</a>
+                </td>
+                <td class="cell-date">{{ order.created_at|date:"M d, Y" }}</td>
+                <td class="cell-items">{{ order.items.count }} item{{ order.items.count|pluralize }}</td>
+                <td class="cell-total">{{ currency_symbol }}{{ order.total_amount }}</td>
+                <td class="cell-status"><span class="status-badge status-{{ order.status|lower }}">{{ order.get_status_display }}</span></td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="5">
+                  <div class="empty-state">
+                    <i class="bi bi-inbox"></i>
+                    No orders yet. Start by browsing our menu!
+                  </div>
+                </td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer">
+        <span>{{ recent_orders|length }} order{{ recent_orders|length|pluralize }}</span>
+        <a href="{% url 'orders:list' %}" class="view-all-link">View All Orders <i class="bi bi-chevron-right" style="font-size:10px;"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="notif-card">
+      <div class="notif-header">
+        <h5>Recent Notifications</h5>
+        <a href="{% url 'notifications:list' %}" style="font-size:12px;font-weight:600;color:var(--accent-color);text-decoration:none;">View All</a>
+      </div>
+      {% if recent_notifications %}
+        {% for notif in recent_notifications %}
+        <div class="notification-item {% if not notif.is_read %}unread{% endif %}" style="margin:0;padding:10px 20px;border-bottom:1px solid color-mix(in srgb,var(--default-color),transparent 94%);">
+          <div class="notif-icon" style="width:32px;height:32px;font-size:14px;">
+            <i class="bi bi-bell"></i>
+          </div>
+          <div class="notif-content">
+            <div class="notif-title" style="font-size:13px;">{{ notif.title }}</div>
+            <div class="notif-message" style="font-size:12px;">{{ notif.message|truncatewords:12 }}</div>
+          </div>
+          <div class="notif-time" style="font-size:11px;">{{ notif.created_at|timesince }} ago</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="empty-state">
+          <i class="bi bi-bell-slash"></i>
+          No new notifications.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endwith %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#ce1212';
+
+  /* ── Orders Bar Chart ── */
+  var ordersCtx = document.getElementById('ordersChart');
+  if (ordersCtx) {
+    new Chart(ordersCtx, {
+      type: 'bar',
+      data: {
+        labels: {{ chart_date_labels|safe }},
+        datasets: [{
+          label: 'Orders',
+          data: {{ chart_order_counts|safe }},
+          backgroundColor: colorMix(accentColor, 0.6),
+          hoverBackgroundColor: accentColor,
+          borderRadius: 6,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { font: { size: 10 }, color: '#999' }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: { stepSize: 1, font: { size: 10 }, color: '#999' },
+            grid: { color: 'rgba(0,0,0,0.04)' }
+          }
+        }
+      }
+    });
+  }
+
+  /* ── Revenue Line Chart ── */
+  var revenueCtx = document.getElementById('revenueChart');
+  if (revenueCtx) {
+    var gradient = revenueCtx.getContext('2d').createLinearGradient(0, 0, 0, 200);
+    gradient.addColorStop(0, colorMix(accentColor, 0.3));
+    gradient.addColorStop(1, colorMix(accentColor, 0));
+
+    new Chart(revenueCtx, {
+      type: 'line',
+      data: {
+        labels: {{ chart_date_labels|safe }},
+        datasets: [{
+          label: 'Revenue',
+          data: {{ chart_revenue_totals|safe }},
+          borderColor: accentColor,
+          backgroundColor: gradient,
+          borderWidth: 2.5,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 3,
+          pointBackgroundColor: accentColor,
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { font: { size: 10 }, color: '#999' }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: { font: { size: 10 }, color: '#999', callback: function(v) { return 'Le ' + v; } },
+            grid: { color: 'rgba(0,0,0,0.04)' }
+          }
+        }
+      }
+    });
+  }
+
+  function colorMix(color, alpha) {
+    if (color.startsWith('#')) {
+      var r = parseInt(color.slice(1,3), 16);
+      var g = parseInt(color.slice(3,5), 16);
+      var b = parseInt(color.slice(5,7), 16);
+      return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+    }
+    return color;
+  }
+
+  /* ── Table Tab Filters ── */
+  var tabs = document.querySelectorAll('.table-tab');
+  var rows = document.querySelectorAll('#ordersTable tbody tr[data-status]');
+
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      tabs.forEach(function(t) { t.classList.remove('active'); });
+      this.classList.add('active');
+
+      var filter = this.getAttribute('data-filter');
+      rows.forEach(function(row) {
+        if (filter === 'all' || row.getAttribute('data-status') === filter) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  });
+});
+</script>
+{% endblock %}

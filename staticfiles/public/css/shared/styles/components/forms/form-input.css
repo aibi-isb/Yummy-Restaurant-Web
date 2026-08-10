@@ -1,0 +1,78 @@
+/* ----------------------------------------
+   Component: Form Input - YUMMI Restaurant
+   Uses existing design tokens from assets/css/main.css
+---------------------------------------- */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--heading-color);
+  margin-bottom: 6px;
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-family: var(--default-font);
+  color: var(--default-color);
+  background-color: color-mix(in srgb, var(--surface-color), transparent 20%);
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 80%);
+  border-radius: 0;
+  transition: 0.3s;
+  outline: none;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  border-color: var(--accent-color);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: color-mix(in srgb, var(--default-color), transparent 70%);
+}
+
+.form-input.error,
+.form-textarea.error,
+.form-select.error {
+  border-color: #df1529;
+}
+
+.form-error {
+  font-size: 12px;
+  color: #df1529;
+  margin-top: 4px;
+  display: none;
+}
+
+.form-error.visible {
+  display: block;
+}
+
+.form-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237f7f90' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.form-select optgroup,
+.form-select option {
+  color: var(--default-color);
+  background-color: var(--surface-color);
+}

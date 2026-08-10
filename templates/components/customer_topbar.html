@@ -1,0 +1,29 @@
+{% with user_name=user.profile.full_name|default:user.username user_initial=user.profile.full_name|first|upper|default:user.username|first|upper %}
+<div class="topbar-left">
+  <button type="button" class="sidebar-toggle bi bi-list" id="sidebarToggle" aria-label="Toggle sidebar"></button>
+  <div class="topbar-search search-bar">
+    <i class="search-icon bi bi-search"></i>
+    <input type="text" class="search-input" placeholder="Search menu..." aria-label="Search menu">
+    <div class="search-suggestions"></div>
+  </div>
+</div>
+
+<div class="topbar-right">
+  <a href="{% url 'orders:cart' %}" class="topbar-link">
+    <i class="bi bi-cart"></i>
+    {% if cart_count > 0 %}
+      <span class="badge cart-count">{{ cart_count }}</span>
+    {% endif %}
+  </a>
+  <a href="{% url 'notifications:list' %}" class="topbar-link">
+    <i class="bi bi-bell"></i>
+    {% if notification_count > 0 %}
+      <span class="badge notif-count">{{ notification_count }}</span>
+    {% endif %}
+  </a>
+  <a href="{% url 'customers:profile' %}" class="topbar-user">
+    <div class="avatar avatar-sm">{{ user_initial }}</div>
+    <span class="user-name topbar-user-name">{{ user_name }}</span>
+  </a>
+</div>
+{% endwith %}
